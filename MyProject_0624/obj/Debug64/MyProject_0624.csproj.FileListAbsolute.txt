@@ -1,0 +1,5 @@
+c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\bin\MyProject_0624.dll
+c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\bin\MyProject_0624.pdb
+c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\obj\Debug64\MyProject_0624.csprojResolveAssemblyReference.cache
+c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\obj\Debug64\MyProject_0624.dll
+c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\obj\Debug64\MyProject_0624.pdb
