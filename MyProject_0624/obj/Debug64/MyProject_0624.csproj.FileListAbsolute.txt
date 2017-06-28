@@ -3,3 +3,8 @@ c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_
 c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\obj\Debug64\MyProject_0624.csprojResolveAssemblyReference.cache
 c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\obj\Debug64\MyProject_0624.dll
 c:\users\hanshen\documents\visual studio 2015\Projects\MyProject_0624\MyProject_0624\obj\Debug64\MyProject_0624.pdb
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_0624.dll
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_0624.pdb
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.csprojResolveAssemblyReference.cache
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.dll
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.pdb
