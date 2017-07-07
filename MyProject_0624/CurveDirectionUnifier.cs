@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
@@ -25,6 +24,7 @@ namespace MyProject_0624
         {
             pManager.AddCurveParameter("Curves", "Crv", "Curves for sorting", GH_ParamAccess.list);
             pManager.AddNumberParameter("Tolerance", "t", "Tolerance in degree for the unifier", GH_ParamAccess.item);
+            
             
 
 
