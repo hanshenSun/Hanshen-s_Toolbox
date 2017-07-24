@@ -17,4 +17,3 @@ C:\Users\user\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_06
 C:\Users\user\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_0624.pdb
 C:\Users\user\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.dll
 C:\Users\user\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.pdb
-C:\Users\user\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.csprojResolveAssemblyReference.cache

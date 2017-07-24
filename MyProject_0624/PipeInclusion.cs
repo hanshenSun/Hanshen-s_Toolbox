@@ -25,8 +25,7 @@ namespace MyProject_0624
         {
             pManager.AddCurveParameter("Curves", "CrvA", "Curve (New) to generate pipes from", GH_ParamAccess.item);
             pManager.AddCurveParameter("Curves", "CrvB", "Curve (Old) to seach from", GH_ParamAccess.list);
-
-            //pManager.AddPointParameter("Point", "pt", "Point for evaluation", GH_ParamAccess.list);
+            pManager.AddBooleanParameter("preview", "preview", "preview option for the inclusion range", GH_ParamAccess.item);
             pManager.AddNumberParameter("Tolerance", "t", "Tolerance for evaluation",GH_ParamAccess.item);
 
         }
@@ -37,6 +36,7 @@ namespace MyProject_0624
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddBooleanParameter("Result", "r", "Result from the evaluation",GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Index", "i", "Found Member Index", GH_ParamAccess.list);
             pManager.AddMeshParameter("Pipe Mesh", "m", "Pipe Mesh for Preview", GH_ParamAccess.item);
             pManager.AddTextParameter("output", "p", "outputMessage", GH_ParamAccess.item);
 
@@ -54,42 +54,44 @@ namespace MyProject_0624
 
             List<Point3d> testPts = new List<Point3d>();
             double tolerance = new double();
-            //Brep curvePipe = new Brep();
-            //PipeCapMode cap = PipeCapMode.Round;
             List<bool> results = new List<bool>();
-             
 
+            List<int> ouputIndex = new List<int>();
+
+            bool previewSwitch = new bool();
+            List<Brep> pipeGeometries = new List<Brep>();
 
 
             DA.GetData(0, ref inputCrvA);
             DA.GetDataList(1, inputCrvsB);
-            //DA.GetDataList(2, testPts);
-            DA.GetData(2, ref tolerance);
+            DA.GetData(2, ref previewSwitch);
+            DA.GetData(3, ref tolerance);
 
 
 
-            //Brep[] curvePipe = Brep.CreatePipe(inputCrv, 0.5, true, cap, true, 0.0,0.0);
-            Brep[] curvePipe = Brep.CreatePipe(inputCrvA, tolerance, false, PipeCapMode.Round, true, 0.1, 0.1);
-            Brep pipeGeometry = curvePipe[0];
+            if (previewSwitch == true)
+            {
+                Brep[] curvePipe = Brep.CreatePipe(inputCrvA, tolerance, false, PipeCapMode.Round, true, 0.1, 0.1);
+                Brep pipeGeometry = curvePipe[0];
+                pipeGeometries.Add(pipeGeometry);
 
-            Mesh meshedPipe = Mesh.CreateFromBrep(pipeGeometry)[0];
+            }
 
-            string message = "Got PIPe";
+            //Mesh meshedPipe = Mesh.CreateFromBrep(pipeGeometry)[0];
+            //string message = "Got Pipe";
 
 
             //Getting start/end Pt from the mainCrv
             Point3d mainStartPt = inputCrvA.PointAtStart;
             Point3d mainEndpt = inputCrvA.PointAtEnd;
 
-            //Sphere startSphere = new Sphere(mainStartPt, tolerance);
-            //Sphere endSphere = new Sphere(mainEndpt, tolerance);
 
 
 
 
             //diving inputCrvsB
             List<Point3d> divisionPtfromCrv = new List<Point3d>();
-
+            int i = 0;
             foreach (Curve crv in inputCrvsB) {
                 Point3d startptTemp = crv.PointAtStart;
                 Point3d endptTemp = crv.PointAtEnd;
@@ -107,6 +109,7 @@ namespace MyProject_0624
                         if (distanceEndtoEnd < tolerance)
                         {
                             results.Add(true);
+                            ouputIndex.Add(i);
                         }
 
                         if (distanceA > distanceB)
@@ -116,6 +119,7 @@ namespace MyProject_0624
                             if (distanceEndtoStart < tolerance)
                             {
                                 results.Add(true);
+                                ouputIndex.Add(i);
                             }
                         }
                     }
@@ -124,15 +128,19 @@ namespace MyProject_0624
                 else
                 {
                     results.Add(false);
+                    
+
                 }
+                i++;
             }
 
             
 
             
             DA.SetDataList(0, results);
-            DA.SetData(1, meshedPipe);
-            DA.SetData(2, message);
+            DA.SetDataList(1, ouputIndex);
+            DA.SetData(2, pipeGeometries);
+            //DA.SetData(3, message);
 
 
         }
