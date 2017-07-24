@@ -12,8 +12,8 @@ namespace MyProject_0624
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public PipeInclusion()
-          : base("PointInPipe", "PointInPipe",
-              "Brep (Pipe) Inclusion for diagonal members",
+          : base("Crv in Radius", "Cloest Crv in Radius",
+              "Find Similar Member by Searching Within a Certain Radius",
               "HS_ToolBox", "analysis")
         {
         }
@@ -25,7 +25,7 @@ namespace MyProject_0624
         {
             pManager.AddCurveParameter("Curves", "CrvA", "Curve (New) to generate pipes from", GH_ParamAccess.item);
             pManager.AddCurveParameter("Curves", "CrvB", "Curve (Old) to seach from", GH_ParamAccess.list);
-            pManager.AddBooleanParameter("preview", "preview", "preview option for the inclusion range", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Preview", "Preview", "preview option for the inclusion range", GH_ParamAccess.item);
             pManager.AddNumberParameter("Tolerance", "t", "Tolerance for evaluation",GH_ParamAccess.item);
 
         }
@@ -37,7 +37,7 @@ namespace MyProject_0624
         {
             pManager.AddBooleanParameter("Result", "r", "Result from the evaluation",GH_ParamAccess.item);
             pManager.AddIntegerParameter("Index", "i", "Found Member Index", GH_ParamAccess.list);
-            pManager.AddMeshParameter("Pipe Mesh", "m", "Pipe Mesh for Preview", GH_ParamAccess.item);
+            pManager.AddGeometryParameter("Pipe Brep", "g", "Pipe Geometry for Preview", GH_ParamAccess.item);
             pManager.AddTextParameter("output", "p", "outputMessage", GH_ParamAccess.item);
 
 
@@ -49,16 +49,16 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Curve inputCrvA = new NurbsCurve(2,2);
-            List<Curve> inputCrvsB = new List<Curve>();
-
-            List<Point3d> testPts = new List<Point3d>();
             double tolerance = new double();
-            List<bool> results = new List<bool>();
-
-            List<int> ouputIndex = new List<int>();
-
             bool previewSwitch = new bool();
+            
+
+            Curve inputCrvA = new NurbsCurve(2,2);
+            
+            List<Curve> inputCrvsB = new List<Curve>();
+            List<string> message = new List<string>();
+            List<bool> results = new List<bool>();
+            List<int> ouputIndex = new List<int>();
             List<Brep> pipeGeometries = new List<Brep>();
 
 
@@ -77,11 +77,7 @@ namespace MyProject_0624
 
             }
 
-            //Mesh meshedPipe = Mesh.CreateFromBrep(pipeGeometry)[0];
-            //string message = "Got Pipe";
-
-
-            //Getting start/end Pt from the mainCrv
+            
             Point3d mainStartPt = inputCrvA.PointAtStart;
             Point3d mainEndpt = inputCrvA.PointAtEnd;
 
@@ -89,8 +85,6 @@ namespace MyProject_0624
 
 
 
-            //diving inputCrvsB
-            List<Point3d> divisionPtfromCrv = new List<Point3d>();
             int i = 0;
             foreach (Curve crv in inputCrvsB) {
                 Point3d startptTemp = crv.PointAtStart;
@@ -110,25 +104,27 @@ namespace MyProject_0624
                         {
                             results.Add(true);
                             ouputIndex.Add(i);
-                        }
-
-                        if (distanceA > distanceB)
-                        {
-                            //means end point of the temp curve is closer
-                            double distanceEndtoStart = mainEndpt.DistanceTo(startptTemp);
-                            if (distanceEndtoStart < tolerance)
-                            {
-                                results.Add(true);
-                                ouputIndex.Add(i);
-                            }
+                            message.Add("Found/NotFlipped");
                         }
                     }
+                    if (distanceA > distanceB)
+                    {
+                        //means end point of the temp curve is closer
+                        double distanceEndtoStart = mainEndpt.DistanceTo(startptTemp);
+                        if (distanceEndtoStart < tolerance)
+                        {
+                            results.Add(true);
+                            ouputIndex.Add(i);
+                            message.Add("Found/Flipped");
+                        }
+                    }
+                    
                 }
 
                 else
                 {
                     results.Add(false);
-                    
+                    message.Add("NOTfound/");
 
                 }
                 i++;
@@ -140,7 +136,7 @@ namespace MyProject_0624
             DA.SetDataList(0, results);
             DA.SetDataList(1, ouputIndex);
             DA.SetData(2, pipeGeometries);
-            //DA.SetData(3, message);
+            DA.SetData(3, message);
 
 
         }

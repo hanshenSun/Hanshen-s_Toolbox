@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyProject_0624", "MyProject_0624.csproj", "{056791E0-4F94-429E-A98D-0A756B64588E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HS_Toolbox", "HS_Toolbox.csproj", "{056791E0-4F94-429E-A98D-0A756B64588E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
