@@ -12,7 +12,7 @@ namespace MyProject_0624
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public PipeInclusion()
-          : base("Brep Inclusion for diagonal members", "PointInPipe",
+          : base("PointInPipe", "PointInPipe",
               "Brep (Pipe) Inclusion for diagonal members",
               "HS_ToolBox", "analysis")
         {
@@ -26,7 +26,7 @@ namespace MyProject_0624
             pManager.AddCurveParameter("Curves", "CrvA", "Curve (New) to generate pipes from", GH_ParamAccess.item);
             pManager.AddCurveParameter("Curves", "CrvB", "Curve (Old) to seach from", GH_ParamAccess.list);
 
-            pManager.AddPointParameter("Point", "pt", "Point for evaluation", GH_ParamAccess.list);
+            //pManager.AddPointParameter("Point", "pt", "Point for evaluation", GH_ParamAccess.list);
             pManager.AddNumberParameter("Tolerance", "t", "Tolerance for evaluation",GH_ParamAccess.item);
 
         }
@@ -63,8 +63,8 @@ namespace MyProject_0624
 
             DA.GetData(0, ref inputCrvA);
             DA.GetDataList(1, inputCrvsB);
-            DA.GetDataList(2, testPts);
-            DA.GetData(3, ref tolerance);
+            //DA.GetDataList(2, testPts);
+            DA.GetData(2, ref tolerance);
 
 
 
@@ -72,26 +72,67 @@ namespace MyProject_0624
             Brep[] curvePipe = Brep.CreatePipe(inputCrvA, tolerance, false, PipeCapMode.Round, true, 0.1, 0.1);
             Brep pipeGeometry = curvePipe[0];
 
+            Mesh meshedPipe = Mesh.CreateFromBrep(pipeGeometry)[0];
+
             string message = "Got PIPe";
 
 
+            //Getting start/end Pt from the mainCrv
+            Point3d mainStartPt = inputCrvA.PointAtStart;
+            Point3d mainEndpt = inputCrvA.PointAtEnd;
+
+            //Sphere startSphere = new Sphere(mainStartPt, tolerance);
+            //Sphere endSphere = new Sphere(mainEndpt, tolerance);
+
+
+
+
             //diving inputCrvsB
-            
-            
+            List<Point3d> divisionPtfromCrv = new List<Point3d>();
 
+            foreach (Curve crv in inputCrvsB) {
+                Point3d startptTemp = crv.PointAtStart;
+                Point3d endptTemp = crv.PointAtEnd;
 
+                double distanceA = mainStartPt.DistanceTo(startptTemp);
+                double distanceB = mainStartPt.DistanceTo(endptTemp);
 
-            
-            foreach (Point3d pt in testPts)
-            {
-                bool result = new bool();
-                result = pipeGeometry.IsPointInside(pt, tolerance, true);
-                results.Add(result);
+                //if one point matches
+                if (distanceA < tolerance || distanceB < tolerance)
+                {
+                    if (distanceA < distanceB)
+                    {
+                        //means start point of the temp curve is closer
+                        double distanceEndtoEnd = mainEndpt.DistanceTo(endptTemp);
+                        if (distanceEndtoEnd < tolerance)
+                        {
+                            results.Add(true);
+                        }
 
+                        if (distanceA > distanceB)
+                        {
+                            //means end point of the temp curve is closer
+                            double distanceEndtoStart = mainEndpt.DistanceTo(startptTemp);
+                            if (distanceEndtoStart < tolerance)
+                            {
+                                results.Add(true);
+                            }
+                        }
+                    }
+                }
+
+                else
+                {
+                    results.Add(false);
+                }
             }
+
+            
+
             
             DA.SetDataList(0, results);
-            DA.SetData(1, message);
+            DA.SetData(1, meshedPipe);
+            DA.SetData(2, message);
 
 
         }

@@ -55,7 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="June.cs" />
+    <None Include="June.cs" />
     <Compile Include="CurveDirectionUnifier.cs" />
     <Compile Include="PipeInclusion.cs" />
     <Compile Include="MyProject_0624Info.cs" />

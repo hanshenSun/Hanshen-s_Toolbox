@@ -18,7 +18,7 @@ namespace MyProject_0624
         public June()
           : base("makeLine", "makeline",
               "test to see if we can make a line",
-              "TestBuildsInJune", "HS_Geometry")
+              "HS_ToolBox", "HS_Geometry")
         {
         }
 
