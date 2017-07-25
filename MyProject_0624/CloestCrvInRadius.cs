@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class PipeInclusion : GH_Component
+    public class CloestCrvInRadius : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public PipeInclusion()
+        public CloestCrvInRadius()
           : base("Crv in Radius", "Cloest Crv in Radius",
               "Find Similar Member by Searching Within a Certain Radius",
               "HS_ToolBox", "analysis")

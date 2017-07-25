@@ -4,13 +4,13 @@ using Grasshopper.Kernel;
 
 namespace MyProject_0624
 {
-    public class MyProject_0624Info : GH_AssemblyInfo
+    public class HS_ToolboxInfo : GH_AssemblyInfo
     {
         public override string Name
         {
             get
             {
-                return "MyProject0624";
+                return "HS_Toolbox";
             }
         }
         public override Bitmap Icon
