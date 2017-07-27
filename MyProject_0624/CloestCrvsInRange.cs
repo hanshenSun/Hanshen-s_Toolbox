@@ -36,6 +36,7 @@ namespace MyProject_0624
         {
             pManager.AddIntegerParameter("Index", "i", "index of Found Child Curves",GH_ParamAccess.list);
             pManager.AddBrepParameter("PipeBrep", "brep", "Brep for Preview", GH_ParamAccess.item);
+            pManager.AddNumberParameter("distance", "distance", "distance", GH_ParamAccess.list);
             
         }
 
@@ -50,7 +51,7 @@ namespace MyProject_0624
             double tolerance = new double();
             bool previewSwitch = new bool();
             List<int> index = new List<int>();
-
+            List<double> tempMaxdistanceList = new List<double>();
 
             double tempMaxdistance;
             double tempMaxParaA;
@@ -71,18 +72,53 @@ namespace MyProject_0624
             int i = 0;
             foreach (Curve crv in inputCrvsB)
             {
-                
-                
 
-                Curve.GetDistancesBetweenCurves(inputCrvA, crv, tolerance, out tempMaxdistance, out tempMaxParaA, out tempMaxParaB, out tempMinDistance, out tempMinParaA, out tempMinParaB);
 
-                if (tempMaxdistance <= tolerance)
+                /*
+                if (Curve.GetDistancesBetweenCurves(inputCrvA, crv, tolerance, out tempMaxdistance, out tempMaxParaA, out tempMaxParaB, out tempMinDistance, out tempMinParaA, out tempMinParaB))
                 {
-                    index.Add(i);
+
+                
+
+                    if (tempMaxdistance <= tolerance)
+                    {
+                        index.Add(i);
+                        tempMaxdistanceList.Add(tempMaxdistance);
+                    }
 
                 }
+                */
+                Point3d[] tempPts;
+                crv.DivideByCount(2, true, out tempPts);
+                List<bool> tempBools = new List<bool>();
+
+
+                foreach (Point3d pt in tempPts)
+                {
+                    double tempParameter;
+                    
+
+                    if (inputCrvA.ClosestPoint(pt,out tempParameter, tolerance))
+                    {
+
+                        tempBools.Add(true);
+                    }
+                }
+
+
+                if (tempBools.Count == 3)
+                {
+                    index.Add(i);
+                }
+
+
 
                 
+               
+
+
+                
+
                 i++;
             }
 
@@ -96,7 +132,7 @@ namespace MyProject_0624
                     
             }
             DA.SetDataList(0, index);
-            
+            DA.SetDataList(2, tempMaxdistanceList);
 
 
 
