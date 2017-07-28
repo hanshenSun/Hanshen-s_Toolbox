@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using MyProject_0624.Properties;
 
 namespace MyProject_0624
 {
@@ -27,6 +28,7 @@ namespace MyProject_0624
             pManager.AddCurveParameter("Curves", "CrvB", "Curve (Old) to seach from", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Preview", "Preview", "preview option for the inclusion range", GH_ParamAccess.item);
             pManager.AddNumberParameter("Tolerance", "t", "Tolerance for evaluation", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Child Crv Percentage Tolerance", "Tolerance", "Child Crv Percentage Tolerance, for exampe: 10%",GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -52,13 +54,10 @@ namespace MyProject_0624
             bool previewSwitch = new bool();
             List<int> index = new List<int>();
             List<double> tempMaxdistanceList = new List<double>();
+            List<double> FoundCrvsLength = new List<double>();
+            List<double> foundDistance = new List<double>();
+            List<bool> chilCrvPercentage = new List<bool>();
 
-            double tempMaxdistance;
-            double tempMaxParaA;
-            double tempMaxParaB;
-            double tempMinDistance;
-            double tempMinParaA;
-            double tempMinParaB;
 
 
             DA.GetData(0, ref inputCrvA);
@@ -67,7 +66,8 @@ namespace MyProject_0624
             DA.GetData(3, ref tolerance);
 
 
-            
+            double inputCrvALength = inputCrvA.GetLength();
+
 
             int i = 0;
             foreach (Curve crv in inputCrvsB)
@@ -109,6 +109,23 @@ namespace MyProject_0624
                 if (tempBools.Count == 3)
                 {
                     index.Add(i);
+                    
+
+                    Point3d tempPtA;
+                    Point3d tempPtB;
+                    inputCrvA.ClosestPoints(crv, out tempPtA, out tempPtB);
+                    foundDistance.Add(tempPtA.DistanceTo(tempPtB));
+
+                    double tempCrvLength = crv.GetLength();
+
+
+                    FoundCrvsLength.Add(tempCrvLength);
+                    if (tempCrvLength / inputCrvALength > 1.1 || tempCrvLength / inputCrvALength > 0.9)
+                    {
+                        chilCrvPercentage.Add(true);
+
+                    }
+
                 }
 
 
@@ -132,7 +149,7 @@ namespace MyProject_0624
                     
             }
             DA.SetDataList(0, index);
-            DA.SetDataList(2, tempMaxdistanceList);
+            DA.SetDataList(2, foundDistance);
 
 
 
@@ -146,8 +163,12 @@ namespace MyProject_0624
             get
             {
                 //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return null;
+
+
+                return Resources.CloestCrvsInRange;
+
+
+                //return null;
             }
         }
 
