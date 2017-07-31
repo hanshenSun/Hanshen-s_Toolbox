@@ -13,7 +13,7 @@ namespace MyProject_0624
         public CurveDirectionUnifier()
           : base("CurveDirectionUnifier", "CurveDirUnifier",
               "Unifies all the input curves towards a similar direction within tolerance",
-              "HS_ToolBox", "GeoFix")
+              "HS_ToolBox", "GeometryFix")
         {
         }
 

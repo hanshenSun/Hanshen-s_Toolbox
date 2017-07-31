@@ -27,8 +27,8 @@ namespace MyProject_0624
             pManager.AddCurveParameter("Curves", "CrvA", "Curve (New) to generate pipes from", GH_ParamAccess.item);
             pManager.AddCurveParameter("Curves", "CrvB", "Curve (Old) to seach from", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Preview", "Preview", "preview option for the inclusion range", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Tolerance", "t", "Tolerance for evaluation", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Child Crv Percentage Tolerance", "Tolerance", "Child Crv Percentage Tolerance, for exampe: 10%",GH_ParamAccess.list);
+            pManager.AddNumberParameter("Tolerance", "Distance", "Tolerance for evaluation", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Child Crv Percentage Tolerance", "Tolerance", "Child Crv Percentage Tolerance, for exampe: for tolerance domain between 90% - 110%, input 0.1 HERE", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -36,11 +36,16 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Index", "i", "index of Found Child Curves",GH_ParamAccess.list);
-            pManager.AddBrepParameter("PipeBrep", "brep", "Brep for Preview", GH_ParamAccess.item);
-            pManager.AddNumberParameter("distance", "distance", "distance", GH_ParamAccess.list);
-            
+            pManager.AddIntegerParameter("Index", "I", "index of Found Child Curves",GH_ParamAccess.list);
+            pManager.AddBrepParameter("PipeBrep", "Brep", "Brep for Preview", GH_ParamAccess.item);
+            pManager.AddNumberParameter("distance", "Distance", "distance", GH_ParamAccess.list);
+            pManager.AddBooleanParameter("Child/Parent?", "R", "Child or Parents?", GH_ParamAccess.list);
+
         }
+
+
+
+        
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -51,12 +56,13 @@ namespace MyProject_0624
             Curve inputCrvA = new NurbsCurve(2,2);
             List<Curve> inputCrvsB = new List<Curve>();
             double tolerance = new double();
+            double childTolerance = new double();
             bool previewSwitch = new bool();
             List<int> index = new List<int>();
             List<double> tempMaxdistanceList = new List<double>();
             List<double> FoundCrvsLength = new List<double>();
             List<double> foundDistance = new List<double>();
-            List<bool> chilCrvPercentage = new List<bool>();
+            List<bool> childParentBool = new List<bool>();
 
 
 
@@ -72,24 +78,8 @@ namespace MyProject_0624
             int i = 0;
             foreach (Curve crv in inputCrvsB)
             {
-
-
-                /*
-                if (Curve.GetDistancesBetweenCurves(inputCrvA, crv, tolerance, out tempMaxdistance, out tempMaxParaA, out tempMaxParaB, out tempMinDistance, out tempMinParaA, out tempMinParaB))
-                {
-
-                
-
-                    if (tempMaxdistance <= tolerance)
-                    {
-                        index.Add(i);
-                        tempMaxdistanceList.Add(tempMaxdistance);
-                    }
-
-                }
-                */
                 Point3d[] tempPts;
-                crv.DivideByCount(2, true, out tempPts);
+                crv.DivideByCount(2, true, out tempPts); // dividing every curve into 3 pts (including ends)
                 List<bool> tempBools = new List<bool>();
 
 
@@ -98,31 +88,42 @@ namespace MyProject_0624
                     double tempParameter;
                     
 
-                    if (inputCrvA.ClosestPoint(pt,out tempParameter, tolerance))
+                    if (inputCrvA.ClosestPoint(pt,out tempParameter, tolerance))//check if there is any closest point within the tolerated distance
                     {
 
                         tempBools.Add(true);
                     }
+                    /*
+                    else
+                    {
+                        return;
+                    }
+
+                    Potential Class Impementation for faster computation
+                    */ 
+
                 }
 
 
-                if (tempBools.Count == 3)
+
+                if (tempBools.Count == 3)//if found
                 {
                     index.Add(i);
                     
 
                     Point3d tempPtA;
                     Point3d tempPtB;
-                    inputCrvA.ClosestPoints(crv, out tempPtA, out tempPtB);
+                    inputCrvA.ClosestPoints(crv, out tempPtA, out tempPtB);//find out where the cloest points are
                     foundDistance.Add(tempPtA.DistanceTo(tempPtB));
+
 
                     double tempCrvLength = crv.GetLength();
 
 
                     FoundCrvsLength.Add(tempCrvLength);
-                    if (tempCrvLength / inputCrvALength > 1.1 || tempCrvLength / inputCrvALength > 0.9)
+                    if (tempCrvLength / inputCrvALength < 1+childTolerance || tempCrvLength / inputCrvALength > 1-childTolerance)
                     {
-                        chilCrvPercentage.Add(true);
+                        childParentBool.Add(true);
 
                     }
 
@@ -150,6 +151,7 @@ namespace MyProject_0624
             }
             DA.SetDataList(0, index);
             DA.SetDataList(2, foundDistance);
+            DA.SetDataList(3, childParentBool);
 
 
 
