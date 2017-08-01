@@ -29,6 +29,9 @@ namespace MyProject_0624
             pManager.AddBooleanParameter("Preview", "Preview", "preview option for the inclusion range", GH_ParamAccess.item);
             pManager.AddNumberParameter("Tolerance", "Distance", "Tolerance for evaluation", GH_ParamAccess.item);
             pManager.AddNumberParameter("Child Crv Percentage Tolerance", "Tolerance", "Child Crv Percentage Tolerance, for exampe: for tolerance domain between 90% - 110%, input 0.1 HERE", GH_ParamAccess.list);
+            pManager[4].Optional = true;
+
+
         }
 
         /// <summary>
@@ -39,14 +42,33 @@ namespace MyProject_0624
             pManager.AddIntegerParameter("Index", "I", "index of Found Child Curves",GH_ParamAccess.list);
             pManager.AddBrepParameter("PipeBrep", "Brep", "Brep for Preview", GH_ParamAccess.item);
             pManager.AddNumberParameter("distance", "Distance", "distance", GH_ParamAccess.list);
-            pManager.AddBooleanParameter("Child/Parent?", "R", "Child or Parents?", GH_ParamAccess.list);
+            pManager.AddTextParameter("Child/Parent?", "R", "Child or Parents?", GH_ParamAccess.list);
 
         }
 
 
+        private static List<bool> findCloestPt(Point3d[] points, Curve inputCrv, double tol)
+        {
 
-        
+            foreach (Point3d pt in points)
+            {
+                double tempParameter;
+                List<bool> tempBools = new List<bool>();
 
+                if (inputCrv.ClosestPoint(pt, out tempParameter, tol))//check if there is any closest point within the tolerated distance
+                {
+
+                    tempBools.Add(true);
+                }
+                else
+                {
+                    break;
+                }
+
+                return tempBools;
+            }
+
+        }
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -121,11 +143,19 @@ namespace MyProject_0624
 
 
                     FoundCrvsLength.Add(tempCrvLength);
-                    if (tempCrvLength / inputCrvALength < 1+childTolerance || tempCrvLength / inputCrvALength > 1-childTolerance)
+
+                    bool childResult = tempCrvLength / inputCrvALength > 1 + childTolerance;
+
+                    if (tempCrvLength/inputCrvALength < childTolerance)
                     {
-                        childParentBool.Add(true);
+                        childParentBool.Add("child");
 
                     }
+                    else if (tempCrvLength / inputCrvALength > 1 + childTolerance)
+                    {
+                        childParentBool.Add("parent");
+                    }
+
 
                 }
 

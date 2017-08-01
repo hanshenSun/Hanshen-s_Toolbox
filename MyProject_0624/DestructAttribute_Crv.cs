@@ -34,7 +34,7 @@ namespace MyProject_0624
         {
             pManager.AddTextParameter("Dictionary Name", "N", "Dictionary Name", GH_ParamAccess.list);
             pManager.AddTextParameter("Dictionary Data", "D", "Dictionary Data", GH_ParamAccess.list);
-            //pManager.AddBooleanParameter("succeed in retrieving data?", "R", "Retrieve Result", GH_ParamAccess.list);
+            
 
         }
 
@@ -49,7 +49,7 @@ namespace MyProject_0624
             List<string> dictionaryData = new List<string>();
             List<bool> Results = new List<bool>();
 
-            DA.GetDataList(0, inputCrvs);
+            DA.GetData(0, inputCrvs);
             
 
 
@@ -57,13 +57,6 @@ namespace MyProject_0624
 
             for (int i = 0; i < inputCrvs.Count; i++)
             {
-                
-                //string[] listOfKeys = inputCrvs[i].UserDictionary.Keys;
-                //Object[] listOfDatas = inputCrvs[i].UserDictionary.Values;
-
-                //string[] textsss = listOfDatas.ToString();
-
-
 
                 foreach (string tempKeys in inputCrvs[i].UserDictionary.Keys)
                 {
@@ -74,7 +67,6 @@ namespace MyProject_0624
                 {
                     dictionaryData.Add(tempData);
                 }
-                
 
                 
             }
