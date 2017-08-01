@@ -49,7 +49,7 @@ namespace MyProject_0624
             List<string> dictionaryData = new List<string>();
             List<bool> Results = new List<bool>();
 
-            DA.GetData(0, inputCrvs);
+            DA.GetData(0, ref inputCrvs);
             
 
 

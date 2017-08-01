@@ -27,7 +27,7 @@ namespace MyProject_0624
             pManager.AddCurveParameter("Curves", "CrvA", "Curve (New) to generate pipes from", GH_ParamAccess.item);
             pManager.AddCurveParameter("Curves", "CrvB", "Curve (Old) to seach from", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Preview", "Preview", "preview option for the inclusion range", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Tolerance", "Distance", "Tolerance for evaluation", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Distance", "Distance", "Tolerance for evaluation", GH_ParamAccess.item);
             pManager.AddNumberParameter("Child Crv Percentage Tolerance", "Tolerance", "Child Crv Percentage Tolerance, for exampe: for tolerance domain between 90% - 110%, input 0.1 HERE", GH_ParamAccess.list);
             pManager[4].Optional = true;
 
@@ -47,25 +47,27 @@ namespace MyProject_0624
         }
 
 
-        private static List<bool> findCloestPt(Point3d[] points, Curve inputCrv, double tol)
+        private static void findCloestPt(Point3d[] points, Curve inputCrv, double tol, ref List<bool> tempBool)
         {
 
             foreach (Point3d pt in points)
             {
                 double tempParameter;
-                List<bool> tempBools = new List<bool>();
-
+                //List<bool> tempBool = new List<bool>();
+                List<bool> dummyList = new List<bool>();
                 if (inputCrv.ClosestPoint(pt, out tempParameter, tol))//check if there is any closest point within the tolerated distance
                 {
 
-                    tempBools.Add(true);
+                    tempBool.Add(true);
+                    
                 }
                 else
                 {
+                    
                     break;
                 }
 
-                return tempBools;
+                //return tempBools;
             }
 
         }
@@ -84,7 +86,7 @@ namespace MyProject_0624
             List<double> tempMaxdistanceList = new List<double>();
             List<double> FoundCrvsLength = new List<double>();
             List<double> foundDistance = new List<double>();
-            List<bool> childParentBool = new List<bool>();
+            List<string> childParentBool = new List<string>();
 
 
 
@@ -92,6 +94,13 @@ namespace MyProject_0624
             DA.GetDataList(1, inputCrvsB);
             DA.GetData(2, ref previewSwitch);
             DA.GetData(3, ref tolerance);
+
+
+            if (tolerance <= 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Distance cannot be less than 0");
+            }
+               
 
 
             double inputCrvALength = inputCrvA.GetLength();
@@ -102,33 +111,37 @@ namespace MyProject_0624
             {
                 Point3d[] tempPts;
                 crv.DivideByCount(2, true, out tempPts); // dividing every curve into 3 pts (including ends)
-                List<bool> tempBools = new List<bool>();
+                List<bool> tempBool = new List<bool>();
 
 
-                foreach (Point3d pt in tempPts)
-                {
-                    double tempParameter;
-                    
-
-                    if (inputCrvA.ClosestPoint(pt,out tempParameter, tolerance))//check if there is any closest point within the tolerated distance
-                    {
-
-                        tempBools.Add(true);
-                    }
-                    /*
-                    else
-                    {
-                        return;
-                    }
-
-                    Potential Class Impementation for faster computation
-                    */ 
-
-                }
+                //foreach (Point3d pt in tempPts)
+                //{
+                //    double tempParameter;
 
 
+                //    if (inputCrvA.ClosestPoint(pt,out tempParameter, tolerance))//check if there is any closest point within the tolerated distance
+                //    {
 
-                if (tempBools.Count == 3)//if found
+                //        tempBools.Add(true);
+                //    }
+                //    /*
+                //    else
+                //    {
+                //        return;
+                //    }
+
+                //    Potential Class Impementation for faster computation
+                //    */ 
+
+                //}
+
+                findCloestPt(tempPts, inputCrvA, tolerance, ref tempBool);
+
+
+
+
+                
+                if (tempBool.Count == 3)//if found
                 {
                     index.Add(i);
                     
