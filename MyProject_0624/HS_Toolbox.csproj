@@ -62,6 +62,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ZoomIterator_Obj.cs" />
     <None Include="June.cs" />
     <Compile Include="CurveDirectionUnifier.cs" />
     <None Include="CloestCrvInRadius.cs" />
@@ -72,7 +73,9 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\CloestCrvsInRange_New.bmp" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -81,6 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\CloestCrvsInRange.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\CloestCrvsInRange_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\ZoomIterator_Obj.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

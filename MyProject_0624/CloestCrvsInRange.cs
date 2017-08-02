@@ -210,7 +210,7 @@ namespace MyProject_0624
                 //You can add image files to your project resources and access them like this:
 
 
-                return Resources.CloestCrvsInRange;
+                return Resources.CloestCrvsInRange_new;
 
 
                 //return null;
