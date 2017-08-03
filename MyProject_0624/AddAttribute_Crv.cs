@@ -14,7 +14,7 @@ namespace MyProject_0624
         public AddAttribute_Crv()
           : base("Add Attribute_Crv", "AddAttribute_Crv",
               "Add Attribute (Userdictionary) to a curve",
-              "HS_ToolBox", "Geometry")
+              "HS_ToolBox", "BIM Tools")
         {
         }
 
@@ -26,7 +26,7 @@ namespace MyProject_0624
             pManager.AddCurveParameter("curve for adding attribute", "Crv", "Curve for adding attributes", GH_ParamAccess.item);
             pManager.AddTextParameter("Name of the Dictionary", "Name", "Dictionary Name", GH_ParamAccess.list);
             pManager.AddTextParameter("Name of the Attribute", "Attribute", "Dictionary Attribute", GH_ParamAccess.list);
-            //pManager[0].Optional = true;
+            
 
 
         }
@@ -37,7 +37,7 @@ namespace MyProject_0624
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddCurveParameter("Assigned Curve", "Crv", "Curve with assigned attributes",GH_ParamAccess.list);
-            //pManager.HideParameter(0);
+            
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace MyProject_0624
 
             // Then we need to access the input parameters individually. 
             // When data cannot be extracted from a parameter, we should abort this method.
-            //if (!DA.GetData(0, ref plane)) return;
+            
             DA.GetData(0, ref inputGeometry);
             DA.GetDataList(1, attriName);
             DA.GetDataList(2, attriData);
@@ -91,7 +91,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.AddAttribute_Crv;
             }
         }
 

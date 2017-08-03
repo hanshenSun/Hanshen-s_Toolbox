@@ -39,7 +39,6 @@ namespace MyProject_0624
         {
             pManager.AddCurveParameter("Sorted Curves", "Crv", "Sorted Curves", GH_ParamAccess.list);
             pManager.AddVectorParameter("CurveTangent", "t", "Vector at middle", GH_ParamAccess.list);
-            pManager.AddTextParameter("Last Updated Date", "date","BuildDate", GH_ParamAccess.item);
             pManager.AddVectorParameter("firstVector", "FirstVec", "firstVector", GH_ParamAccess.item);
             pManager.AddNumberParameter("DiffAngles", "angle", "Difference in Angles", GH_ParamAccess.list);
 
@@ -142,9 +141,9 @@ namespace MyProject_0624
 
             DA.SetDataList(0, originCrvs);
             DA.SetDataList(1, curveVectors);
-            DA.SetData(2, "0627_11pm");
-            DA.SetData(3, firstVector);
-            DA.SetDataList(4, diffAngles);
+            
+            DA.SetData(2, firstVector);
+            DA.SetDataList(, diffAngles);
         }
 
         /// <summary>

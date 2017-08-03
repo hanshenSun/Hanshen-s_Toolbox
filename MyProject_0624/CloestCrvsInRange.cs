@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using MyProject_0624.Properties;
+
 
 namespace MyProject_0624
 {
@@ -59,15 +61,12 @@ namespace MyProject_0624
                 {
 
                     tempBool.Add(true);
-                    
                 }
                 else
                 {
                     
                     break;
                 }
-
-                //return tempBools;
             }
 
         }
@@ -114,27 +113,6 @@ namespace MyProject_0624
                 List<bool> tempBool = new List<bool>();
 
 
-                //foreach (Point3d pt in tempPts)
-                //{
-                //    double tempParameter;
-
-
-                //    if (inputCrvA.ClosestPoint(pt,out tempParameter, tolerance))//check if there is any closest point within the tolerated distance
-                //    {
-
-                //        tempBools.Add(true);
-                //    }
-                //    /*
-                //    else
-                //    {
-                //        return;
-                //    }
-
-                //    Potential Class Impementation for faster computation
-                //    */ 
-
-                //}
-
                 findCloestPt(tempPts, inputCrvA, tolerance, ref tempBool);
 
 
@@ -144,13 +122,23 @@ namespace MyProject_0624
                 if (tempBool.Count == 3)//if found
                 {
                     index.Add(i);
+                    List<double> listofDistance = new List<double>();
+
+                    foreach(Point3d evaluationPt in tempPts)
+                    {
+                        double crvBParameter;
+                        inputCrvA.ClosestPoint(evaluationPt, out crvBParameter);
+                        double tempDistancetoCrvA = evaluationPt.DistanceTo(inputCrvA.PointAt(crvBParameter));
+                        listofDistance.Add(tempDistancetoCrvA);
+                    }
+                    //Point3d tempPtA;
+                    //Point3d tempPtB;
+                    //inputCrvA.ClosestPoints(crv, out tempPtA, out tempPtB);//find out where the cloest points are
+
+
+                    double maxDistance = listofDistance.Max();
+                    foundDistance.Add(maxDistance);
                     
-
-                    Point3d tempPtA;
-                    Point3d tempPtB;
-                    inputCrvA.ClosestPoints(crv, out tempPtA, out tempPtB);//find out where the cloest points are
-                    foundDistance.Add(tempPtA.DistanceTo(tempPtB));
-
 
                     double tempCrvLength = crv.GetLength();
 
@@ -168,18 +156,13 @@ namespace MyProject_0624
                     {
                         childParentBool.Add("parent");
                     }
-
+                    else
+                    {
+                        childParentBool.Add("");
+                    }
 
                 }
-
-
-
                 
-               
-
-
-                
-
                 i++;
             }
 

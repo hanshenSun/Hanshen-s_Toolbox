@@ -14,7 +14,7 @@ namespace MyProject_0624
         public DestructAttribute_Crv()
           : base("Deconstruct Attribute_Crv", "DestructAttribute_Crv",
               "Retrieve Attribute (Userdictionary) to a curve",
-              "HS_ToolBox", "Geometry")
+              "HS_ToolBox", "BIM Tools")
         {
         }
 
@@ -23,7 +23,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve for retrieving data", "Crv", "Curve for retrieving data", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Curve for retrieving data", "Crv", "Curve for retrieving data", GH_ParamAccess.list);
 
         }
 
@@ -47,12 +47,10 @@ namespace MyProject_0624
             List<Curve> inputCrvs = new List<Curve>();
             List<string> dictionaryName = new List<string>();
             List<string> dictionaryData = new List<string>();
-            List<bool> Results = new List<bool>();
-
-            DA.GetData(0, ref inputCrvs);
             
 
-
+            DA.GetDataList(0, inputCrvs);
+            
             
 
             for (int i = 0; i < inputCrvs.Count; i++)
@@ -60,19 +58,24 @@ namespace MyProject_0624
 
                 foreach (string tempKeys in inputCrvs[i].UserDictionary.Keys)
                 {
+
+                    //string[] keyName = new string[] {tempKeys};
+                    
                     dictionaryName.Add(tempKeys);
                 }
                 
                 foreach (string tempData in inputCrvs[i].UserDictionary.Values)
                 {
+                    //string[] valueName = new string[] {tempData};
                     dictionaryData.Add(tempData);
                 }
 
                 
             }
+
             DA.SetDataList(0, dictionaryName);
             DA.SetDataList(1, dictionaryData);
-            //DA.SetDataList(2, Results);
+            
 
         }
 
@@ -85,7 +88,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.DestructAttribute_Crv;
             }
         }
 

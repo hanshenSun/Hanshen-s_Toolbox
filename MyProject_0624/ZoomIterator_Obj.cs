@@ -45,9 +45,9 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Object Type", "Type", "Object Type", GH_ParamAccess.item);
-            pManager.AddTextParameter("Message", "Message", "Message", GH_ParamAccess.item);
-
+            //pManager.AddTextParameter("Object Type", "Type", "Object Type", GH_ParamAccess.item);
+            //pManager.AddTextParameter("Message", "Message", "Message", GH_ParamAccess.item);
+            //pManager.AddPointParameter("Points", "Points", "Points", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -58,54 +58,47 @@ namespace MyProject_0624
         {
             
             List<GeometryBase> inputGeo = new List<GeometryBase>();
+            //List<Point3d> centerPts = new List<Point3d>();
             bool switchBool = new bool();
             int miliSec = new int();
             double scaleFactor = new double();
-            //int miliSec = new Int32();
-
-
-
+            
+         
             DA.GetDataList(0, inputGeo);
+
+            if (inputGeo.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Input Geometry Type not Supported");
+            }
+
+
             DA.GetData(1, ref scaleFactor);
             DA.GetData(2, ref switchBool);
             DA.GetData(3, ref miliSec);
 
-            var miliSecTypeVar = miliSec.GetType();
-            string miliSecType = miliSecTypeVar.ToString();
-            /*
-            if (miliSec.GetType() != typeof(int))
-            {
-                miliSec
-            }
-            */
+
+       
             if (switchBool == true)
             {
-                foreach (GeometryBase geos in inputGeo)
+                foreach (GeometryBase geo in inputGeo)
                 {
                     
 
-                    BoundingBox geometryBBox = geos.GetBoundingBox(false);
-                    Point3d BBoxCenterPt = new Point3d();
-
-                    BBoxCenterPt = geometryBBox.Center;
-
-                    //Brep BBox = geometryBBox.ToBrep();
-                    Transform scaleTransform = Rhino.Geometry.Transform.Scale(BBoxCenterPt, scaleFactor);
-                    geos.Transform(scaleTransform);
-
+                    BoundingBox geometryBBox = geo.GetBoundingBox(false);//get a boundingbox for zooming
+                    Point3d BBoxCenterPt = geometryBBox.Center;
                     
-                    RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.ZoomBoundingBox(geos.GetBoundingBox(false));
+                    //scalling the boundingbox
+                    Transform scaleTransform = Rhino.Geometry.Transform.Scale(BBoxCenterPt, scaleFactor);
+                    geometryBBox.Transform(scaleTransform);
 
-
-
+                    //zooming in the viewport
+                    RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.ZoomBoundingBox(geometryBBox);
                     System.Threading.Thread.Sleep(miliSec);
-
                     RhinoDoc.ActiveDoc.Views.Redraw();
-
-
-
+                    
                 }
             }
+
             
 
 
@@ -118,8 +111,6 @@ namespace MyProject_0624
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return Properties.Resources.ZoomIterator_Obj;
             }
         }

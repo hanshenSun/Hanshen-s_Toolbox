@@ -63,6 +63,16 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AddAttribute_Crv {
+            get {
+                object obj = ResourceManager.GetObject("AddAttribute_Crv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CloestCrvsInRange {
             get {
                 object obj = ResourceManager.GetObject("CloestCrvsInRange", resourceCulture);
@@ -76,6 +86,26 @@ namespace MyProject_0624.Properties {
         internal static System.Drawing.Bitmap CloestCrvsInRange_new {
             get {
                 object obj = ResourceManager.GetObject("CloestCrvsInRange_new", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DestructAttribute_Crv {
+            get {
+                object obj = ResourceManager.GetObject("DestructAttribute_Crv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HS_ToolBox {
+            get {
+                object obj = ResourceManager.GetObject("HS_ToolBox", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

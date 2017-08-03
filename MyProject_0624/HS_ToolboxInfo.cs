@@ -17,8 +17,8 @@ namespace MyProject_0624
         {
             get
             {
-                //Return a 24x24 pixel bitmap to represent this GHA library.
-                return null;
+                
+                return Properties.Resources.HS_ToolBox;
             }
         }
         public override string Description
@@ -26,7 +26,7 @@ namespace MyProject_0624
             get
             {
                 //Return a short string describing the purpose of this GHA library.
-                return "";
+                return "This a set of functional tools aim to facilitate the daily workflow of BIM modellers, developped by Hanshen Sun who worked for Thornton Tomasetti";
             }
         }
         public override Guid Id
@@ -42,7 +42,7 @@ namespace MyProject_0624
             get
             {
                 //Return a string identifying you or your company.
-                return "";
+                return "Hanshen Sun";
             }
         }
         public override string AuthorContact
@@ -50,7 +50,7 @@ namespace MyProject_0624
             get
             {
                 //Return a string representing your preferred contact details.
-                return "";
+                return "email to hanshensunw@gmail.com for comments and suggestions";
             }
         }
     }

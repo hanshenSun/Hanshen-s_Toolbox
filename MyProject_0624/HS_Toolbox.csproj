@@ -63,7 +63,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ZoomIterator_Obj.cs" />
-    <None Include="June.cs" />
     <Compile Include="CurveDirectionUnifier.cs" />
     <None Include="CloestCrvInRadius.cs" />
     <Compile Include="HS_ToolboxInfo.cs" />
@@ -90,6 +89,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\ZoomIterator_Obj.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\HS_ToolBox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\DestructAttribute_Crv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\AddAttribute_Crv.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
