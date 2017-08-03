@@ -63,7 +63,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ZoomIterator_Obj.cs" />
-    <Compile Include="CurveDirectionUnifier.cs" />
+    <Compile Include="DirectionUnifier_Crv.cs" />
     <None Include="CloestCrvInRadius.cs" />
     <Compile Include="HS_ToolboxInfo.cs" />
     <Compile Include="CloestCrvsInRange.cs" />
@@ -98,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\AddAttribute_Crv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\DirectionUnifier_Crv.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,7 +26,7 @@ namespace MyProject_0624
             get
             {
                 //Return a short string describing the purpose of this GHA library.
-                return "This a set of functional tools aim to facilitate the daily workflow of BIM modellers, developped by Hanshen Sun who worked for Thornton Tomasetti";
+                return "This a set of functional tools aim to facilitate the daily workflow of BIM modellers, developped by Hanshen Sun who worked for the CORE Studio of Thornton Tomasetti";
             }
         }
         public override Guid Id

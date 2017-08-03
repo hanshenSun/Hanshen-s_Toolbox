@@ -103,6 +103,16 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DirectionUnifier_Crv {
+            get {
+                object obj = ResourceManager.GetObject("DirectionUnifier_Crv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HS_ToolBox {
             get {
                 object obj = ResourceManager.GetObject("HS_ToolBox", resourceCulture);

@@ -8,4 +8,3 @@ C:\Users\HSun\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_06
 C:\Users\HSun\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_0624.pdb
 C:\Users\HSun\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.Properties.Resources.resources
 C:\Users\HSun\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\HS_Toolbox.csproj.GenerateResource.Cache
-C:\Users\HSun\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\HS_Toolbox.csprojResolveAssemblyReference.cache
