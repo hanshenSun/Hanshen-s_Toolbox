@@ -133,6 +133,16 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap isLinear {
+            get {
+                object obj = ResourceManager.GetObject("isLinear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ZoomIterator_Obj {
             get {
                 object obj = ResourceManager.GetObject("ZoomIterator_Obj", resourceCulture);

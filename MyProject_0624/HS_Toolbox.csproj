@@ -58,6 +58,7 @@
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="DestructAttribute_Crv.cs" />
     <Compile Include="GetCenterline_Pipe.cs" />
+    <Compile Include="isLinear.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -105,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\GetCenterLine_Pipe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\isLinear.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
