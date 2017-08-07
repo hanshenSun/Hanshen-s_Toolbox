@@ -6,14 +6,14 @@ using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class DestructAttribute_Crv : GH_Component
+    public class AddAttribute_Pts : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
+        /// Initializes a new instance of the AddAttribute_Pts class.
         /// </summary>
-        public DestructAttribute_Crv()
-          : base("Deconstruct Attribute_Crv", "DestructAttribute_Crv",
-              "Retrieve Attribute (Userdictionary) of Curves",
+        public AddAttribute_Pts()
+          : base("AddAttribute_Pts", "AddAttribute_Pts",
+              "Add Attribute (Userdictionary) to points",
               "HS_ToolBox", "BIM Tools")
         {
         }
@@ -23,8 +23,9 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve for retrieving data", "Crv", "Curve for retrieving data", GH_ParamAccess.list);
-
+            pManager.AddPointParameter("Points", "Pts", "Points to add attributes", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name of the Dictionary", "Name", "Dictionary Name", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name of the Attribute", "Attribute", "Dictionary Attribute", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -32,10 +33,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Dictionary Name", "N", "Dictionary Name", GH_ParamAccess.list);
-            pManager.AddTextParameter("Dictionary Data", "D", "Dictionary Data", GH_ParamAccess.list);
-            
-
+            pManager.AddGenericParameter("Points with Attributes", "hs_Pts", "Points with Attributes", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -44,38 +42,22 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<Curve> inputCrvs = new List<Curve>();
             List<string> dictionaryName = new List<string>();
             List<string> dictionaryData = new List<string>();
-            
 
-            DA.GetDataList(0, inputCrvs);
-            
-            
 
-            for (int i = 0; i < inputCrvs.Count; i++)
-            {
+            Point3d inputPt = new Point3d();
 
-                foreach (string tempKeys in inputCrvs[i].UserDictionary.Keys)
-                {
 
-                    //string[] keyName = new string[] {tempKeys};
-                    
-                    dictionaryName.Add(tempKeys);
-                }
-                
-                foreach (string tempData in inputCrvs[i].UserDictionary.Values)
-                {
-                    //string[] valueName = new string[] {tempData};
-                    dictionaryData.Add(tempData);
-                }
 
-                
-            }
+            DA.GetData(0, ref inputPt);
+            DA.GetDataList(1, dictionaryName);
+            DA.GetDataList(2, dictionaryData);
 
-            DA.SetDataList(0, dictionaryName);
-            DA.SetDataList(1, dictionaryData);
-            
+            hs_Point newPoint = new hs_Point(inputPt, dictionaryName, dictionaryData);
+
+
+            DA.SetData(0, newPoint);
 
         }
 
@@ -88,7 +70,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Properties.Resources.DestructAttribute_Crv;
+                return Properties.Resources.AddAttribute_Pt;
             }
         }
 
@@ -97,7 +79,7 @@ namespace MyProject_0624
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3fd4952f-dda3-4684-b6ee-927a45a8b457"); }
+            get { return new Guid("8f9c44de-dfe5-420f-a296-2b6520a01d81"); }
         }
     }
 }

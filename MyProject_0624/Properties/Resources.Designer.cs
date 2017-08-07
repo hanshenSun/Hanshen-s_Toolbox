@@ -73,6 +73,16 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AddAttribute_Pt {
+            get {
+                object obj = ResourceManager.GetObject("AddAttribute_Pt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Batch_Render {
             get {
                 object obj = ResourceManager.GetObject("Batch_Render", resourceCulture);
@@ -113,6 +123,16 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DestructAttribute_Pt {
+            get {
+                object obj = ResourceManager.GetObject("DestructAttribute_Pt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DirectionUnifier_Crv {
             get {
                 object obj = ResourceManager.GetObject("DirectionUnifier_Crv", resourceCulture);
@@ -146,6 +166,16 @@ namespace MyProject_0624.Properties {
         internal static System.Drawing.Bitmap isLinear {
             get {
                 object obj = ResourceManager.GetObject("isLinear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap setIntersectionDiff {
+            get {
+                object obj = ResourceManager.GetObject("setIntersectionDiff", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -6,14 +6,14 @@ using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class DestructAttribute_Crv : GH_Component
+    public class DestructAttribute_Pts : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
+        /// Initializes a new instance of the DestructAttribute_Pts class.
         /// </summary>
-        public DestructAttribute_Crv()
-          : base("Deconstruct Attribute_Crv", "DestructAttribute_Crv",
-              "Retrieve Attribute (Userdictionary) of Curves",
+        public DestructAttribute_Pts()
+          : base("DestructAttribute_Pts", "DestructAttribute_Pts",
+              "Retrieve Attribute (Userdictionary) of Points",
               "HS_ToolBox", "BIM Tools")
         {
         }
@@ -23,7 +23,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve for retrieving data", "Crv", "Curve for retrieving data", GH_ParamAccess.list);
+            pManager.AddGenericParameter("hs_Pts", "pts", "Input List of Points for retriving attributes", GH_ParamAccess.item);
 
         }
 
@@ -34,8 +34,6 @@ namespace MyProject_0624
         {
             pManager.AddTextParameter("Dictionary Name", "N", "Dictionary Name", GH_ParamAccess.list);
             pManager.AddTextParameter("Dictionary Data", "D", "Dictionary Data", GH_ParamAccess.list);
-            
-
         }
 
         /// <summary>
@@ -44,38 +42,28 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<Curve> inputCrvs = new List<Curve>();
+            //List<Point> inputPoint = new List<Point>();
             List<string> dictionaryName = new List<string>();
             List<string> dictionaryData = new List<string>();
+
+
+            hs_Point inputPt = new hs_Point();
             
 
-            DA.GetDataList(0, inputCrvs);
-            
-            
 
-            for (int i = 0; i < inputCrvs.Count; i++)
-            {
+            DA.GetData(0, ref inputPt);
 
-                foreach (string tempKeys in inputCrvs[i].UserDictionary.Keys)
-                {
+            dictionaryName = inputPt.Name;
+            dictionaryData = inputPt.Value;
 
-                    //string[] keyName = new string[] {tempKeys};
-                    
-                    dictionaryName.Add(tempKeys);
-                }
-                
-                foreach (string tempData in inputCrvs[i].UserDictionary.Values)
-                {
-                    //string[] valueName = new string[] {tempData};
-                    dictionaryData.Add(tempData);
-                }
 
-                
-            }
+
+
+
+
 
             DA.SetDataList(0, dictionaryName);
             DA.SetDataList(1, dictionaryData);
-            
 
         }
 
@@ -88,7 +76,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Properties.Resources.DestructAttribute_Crv;
+                return Properties.Resources.DestructAttribute_Pt;
             }
         }
 
@@ -97,7 +85,7 @@ namespace MyProject_0624
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3fd4952f-dda3-4684-b6ee-927a45a8b457"); }
+            get { return new Guid("70c2364e-1e07-4832-974a-9d6bac3c54e5"); }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MyProject_0624
         public CloestCrvsInRange()
           : base("Cloest Crvs in range", "CloestCrvsInRange",
               "Finding the  curves using geometry inclusion algorithm",
-              "HS_Toolbox", "analysis")
+              "HS_Toolbox", "Analysis")
         {
         }
 

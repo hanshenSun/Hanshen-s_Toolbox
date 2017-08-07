@@ -13,7 +13,7 @@ namespace MyProject_0624
         /// </summary>
         public AddAttribute_Crv()
           : base("Add Attribute_Crv", "AddAttribute_Crv",
-              "Add Attribute (Userdictionary) to a curve",
+              "Add Attribute (Userdictionary) to curves",
               "HS_ToolBox", "BIM Tools")
         {
         }
