@@ -15,3 +15,4 @@ C:\Users\HANSHEN\Documents\Visual Studio 2015\Projects\MyProject_0624\Hanshen-s_
 C:\Users\HANSHEN\Documents\Visual Studio 2015\Projects\MyProject_0624\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.pdb
 C:\Users\HANSHEN\Documents\Visual Studio 2015\Projects\MyProject_0624\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_0624.dll
 C:\Users\HANSHEN\Documents\Visual Studio 2015\Projects\MyProject_0624\Hanshen-s_Toolbox\MyProject_0624\bin\MyProject_0624.pdb
+C:\Users\HSun\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\HS_Toolbox.csprojResolveAssemblyReference.cache

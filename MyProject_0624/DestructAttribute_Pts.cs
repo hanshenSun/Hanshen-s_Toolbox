@@ -23,7 +23,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("hs_Pts", "pts", "Input List of Points for retriving attributes", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Decorated Pts", "pts", "Input List of Points for retriving attributes", GH_ParamAccess.item);
 
         }
 
@@ -32,8 +32,10 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddPointParameter("Deconstructed Pt", "pt", "Deconstructed Pt", GH_ParamAccess.item);
             pManager.AddTextParameter("Dictionary Name", "N", "Dictionary Name", GH_ParamAccess.list);
             pManager.AddTextParameter("Dictionary Data", "D", "Dictionary Data", GH_ParamAccess.list);
+            
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace MyProject_0624
 
 
             hs_Point inputPt = new hs_Point();
+
             
 
 
@@ -55,15 +58,19 @@ namespace MyProject_0624
 
             dictionaryName = inputPt.Name;
             dictionaryData = inputPt.Value;
+            Point3d deconstructedPt = inputPt.basePt;
 
 
 
 
 
+            DA.SetData(0, deconstructedPt);
+            DA.SetDataList(1, dictionaryName);
+            DA.SetDataList(2, dictionaryData);
+            
 
 
-            DA.SetDataList(0, dictionaryName);
-            DA.SetDataList(1, dictionaryData);
+
 
         }
 

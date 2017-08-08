@@ -33,7 +33,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Points with Attributes", "hs_Pts", "Points with Attributes", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Points with Attributes", "Pts", "Points with Attributes", GH_ParamAccess.list);
         }
 
         /// <summary>
