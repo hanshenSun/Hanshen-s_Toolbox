@@ -21,7 +21,7 @@ namespace MyProject_0624
         public ZoomIterator_Obj()
           : base("Zoom Iterator", "Zoom Iterator",
               "Iterates through each element in the input list while zooming to them, coded as a useful tool for spot checking",
-              "HS_Toolbox", "Graphics")
+              "HS_Toolbox", "ViewPort")
         {
         }
 

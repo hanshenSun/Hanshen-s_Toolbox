@@ -16,7 +16,7 @@ namespace MyProject_0624
         public BatchAnimation_Rendering()
           : base("BatchAnimation_Rendering", "Batch_Render",
               "Automates rendering consecutively using Rhino's current renderer. Code for doing batch rendering for animation using V-Ray, Based on Lauren Vasey's script posted on the Grasshopper3d forum",
-              "HS_ToolBox", "Representation")
+              "HS_ToolBox", "ViewPort")
         {
         }
 
