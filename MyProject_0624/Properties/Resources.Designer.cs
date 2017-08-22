@@ -153,6 +153,16 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GetInfo_Viewport {
+            get {
+                object obj = ResourceManager.GetObject("GetInfo_Viewport", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HS_ToolBox {
             get {
                 object obj = ResourceManager.GetObject("HS_ToolBox", resourceCulture);
@@ -166,6 +176,16 @@ namespace MyProject_0624.Properties {
         internal static System.Drawing.Bitmap isLinear {
             get {
                 object obj = ResourceManager.GetObject("isLinear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SetCurrentCamera_Viewport {
+            get {
+                object obj = ResourceManager.GetObject("SetCurrentCamera_Viewport", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

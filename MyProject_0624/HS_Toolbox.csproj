@@ -58,11 +58,13 @@
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="AddAttribute_Pts.cs" />
     <Compile Include="BatchAnimation_Rendering.cs" />
-    <Compile Include="hs_PointObj.cs" />
+    <Compile Include="hs_Obj.cs" />
     <Compile Include="DestructAttribute_Crv.cs" />
     <Compile Include="DestructAttribute_Pts.cs" />
     <Compile Include="GetCenterline_Pipe.cs" />
     <Compile Include="isLinear.cs" />
+    <Compile Include="GetInfo_ViewPort.cs" />
+    <Compile Include="Make2D_ViewPort.cs" />
     <Compile Include="SetCamera_ViewPort.cs" />
     <Compile Include="SetIntersectionDiff_String.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -131,6 +133,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\StringMatchIndex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\SetCurrentCamera_Viewport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\GetInfo_Viewport.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

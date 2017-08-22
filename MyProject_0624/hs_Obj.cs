@@ -26,4 +26,26 @@ namespace MyProject_0624
         }
 
     }
+
+    public class hs_Curve
+    {
+        public Curve baseCrv;
+        public List<string> Name;
+        public List<string> Value;
+
+        public hs_Curve(Curve crv, List<string> dictName, List<string> dictValue)
+        {
+            baseCrv = crv;
+            Name = dictName;
+            Value = dictValue;
+
+        }
+        public hs_Curve()
+        {
+
+        }
+
+
+
+    }
 }

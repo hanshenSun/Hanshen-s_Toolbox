@@ -14,8 +14,8 @@ namespace MyProject_0624
         /// Initializes a new instance of the SetCamera_ViewPort class.
         /// </summary>
         public SetCamera_ViewPort()
-          : base("SetCamera_ViewPort", "SetCamera",
-              "SetCamera in a specified viewport",
+          : base("Set Current Camera in ViewPort", "SetCurrentCamera",
+              "Set Current Camera in a specified viewport",
               "HS_ToolBox", "ViewPort")
         {
         }
@@ -27,8 +27,9 @@ namespace MyProject_0624
         {
             pManager.AddPointParameter("Camera Point", "Camera", "Location  of the camera", GH_ParamAccess.item);
             pManager.AddPointParameter("Target Point", "Target", "Target of the camera", GH_ParamAccess.item);
-            pManager.AddTextParameter("ViewPort Name", "Wiew", "Name of the viewport for setting", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Camera Focus Length", "Length", "Camera Focus Length", GH_ParamAccess.item);
+            //pManager.AddTextParameter("ViewPort Name", "View", "Name of the viewport for setting", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Camera Focus Length", "Length", "Camera Focus Length", GH_ParamAccess.item);
+            pManager[2].Optional = true;
 
 
         }
@@ -49,23 +50,33 @@ namespace MyProject_0624
         {
             Point3d camPt = new Point3d();
             Point3d tarPt = new Point3d();
-            string viewName = "";
-            int cameraAngle = 35;
+            //string viewName = "";
+            double cameraAngle = 35;
+            RhinoViewport vp = new RhinoViewport();
 
 
             DA.GetData(0, ref camPt);
             DA.GetData(1, ref tarPt);
-            DA.GetData(2, ref viewName);
-            DA.GetData(3, ref cameraAngle);
+            
+            DA.GetData(2, ref cameraAngle);
 
 
-            RhinoViewport currentViewPort = Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport;
 
-            //Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.se
+            
+            vp = Rhino.RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport;
 
-            currentViewPort.SetCameraLocations(tarPt, camPt);
+            vp.SetCameraLocations(tarPt, camPt);
 
-            currentViewPort.
+            vp.Camera35mmLensLength = cameraAngle;
+
+            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
+
+
+
+
+
+
+
 
 
 
@@ -87,7 +98,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.SetCurrentCamera_Viewport;
             }
         }
 
