@@ -41,8 +41,10 @@ namespace MyProject_0624
             pManager.AddGeometryParameter("Hidden Crv", "Hidden", "Hidden Crv", GH_ParamAccess.list);
             pManager.AddTextParameter("Message", "Message", "Message", GH_ParamAccess.list);
             pManager.AddBrepParameter("B", "B", "B", GH_ParamAccess.list);
+            pManager.AddPointParameter("Cam", "Cam", "Cam", GH_ParamAccess.item);
+            pManager.AddPointParameter("corner", "corner", "corner", GH_ParamAccess.list);
 
-            
+
         }
 
 
@@ -58,19 +60,19 @@ namespace MyProject_0624
 
             //List<string> message = new List<string>();
 
+            int brepIndex = inputGeos.Count;
 
 
 
-            foreach (Brep inputGeo in inputGeos)
+            for (int index = 0; index <brepIndex; index++)
             {
-
+                Brep inputGeo = inputGeos[index];
                 foreach (Curve brepEdge in inputGeo.Edges)
                 {
                     NurbsCurve singleEdge = brepEdge.ToNurbsCurve();//getting single edgeCurve in each brep
                     List<Point3d> ptAloneCurve = new List<Point3d>();
 
                     
-
 
                     foreach (ControlPoint edgeControlPt in singleEdge.Points)
                     {
@@ -107,33 +109,17 @@ namespace MyProject_0624
 
 
                         //flattenedCurves.Add(projectedSegment);
-                        
+                        /*
                         Curve[] dummyCrvsA;
                         Point3d[] dummyPtsA;
-                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrvA, inputGeo, 0.0, out dummyCrvsA, out dummyPtsA);
+                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrvA, inputGeo, 0.01, out dummyCrvsA, out dummyPtsA);
 
                         Curve[] dummyCrvsB;
                         Point3d[] dummyPtsB;
-                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrvB, inputGeo, 0.0, out dummyCrvsB, out dummyPtsB);
+                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrvB, inputGeo, 0.01, out dummyCrvsB, out dummyPtsB);
 
                         bool caseAbool = false;
-                        /*
-                        foreach(Point3d singlePtA in dummyPtsA)
-                        {
-                            if (singlePtA.DistanceTo(tempLn.ClosestPoint(singlePtA, true)) > 0.01)
-                            {
-                                caseAbool = true;
-                            }
-                        }
-
-                        foreach (Point3d singlePtB in dummyPtsB)
-                        {
-                            if (singlePtB.DistanceTo(tempLn.ClosestPoint(singlePtB, true)) > 0.01)
-                            {
-                                caseAbool = true;
-                            }
-                        }
-                        */
+                      
 
                         if (dummyPtsA.Length >1 || dummyPtsB.Length > 1)
                         {
@@ -154,11 +140,11 @@ namespace MyProject_0624
 
                         else if (dummyPtsA.Length ==1 && dummyPtsB.Length == 1)
                         {
-                            //caseB_Total Solid
+                            //case C_Total Solid
                             solidSegment.Add(projectedSegment);
 
                         }
-                        //Case 2/3
+                        //Case B
                         else
                         {
                             Surface triangleSrf = NurbsSurface.CreateFromCorners(ptAloneCurve[i], ptAloneCurve[i + 1], CameraPt);//created the triangle surface
@@ -173,14 +159,16 @@ namespace MyProject_0624
                             //bool caseBbool = false;//getting result fromm all breps
 
 
-
-                            foreach (Brep tempInputGeo in inputGeos)
+                            for (int ii = 0; ii<brepIndex && ii !=i ; ii++)
+                            //foreach (Brep tempInputGeo in inputGeos)
                             {
+
+                                Brep tempInputGeo = inputGeos[ii];
                                 Curve[] dumIntCrv;
                                 Point3d[] dumIntPt;
 
 
-                                if (Rhino.Geometry.Intersect.Intersection.BrepSurface(tempInputGeo, triangleSrf, 0.0, out dumIntCrv, out dumIntPt))//has intersection
+                                if (Rhino.Geometry.Intersect.Intersection.BrepSurface(tempInputGeo, triangleSrf, 0.01, out dumIntCrv, out dumIntPt))//has intersection
                                 {
                                     //CASE 2, partial intersection
                                     intersectionResults.Add(true);
@@ -310,7 +298,7 @@ namespace MyProject_0624
 
 
 
-                                Rhino.Geometry.Intersect.Intersection.CurveBrep(projectedSegment, singleBrep, 0.1, out overlapBrepCrvs, out overlapBrepPts);
+                                Rhino.Geometry.Intersect.Intersection.CurveBrep(projectedSegment, singleBrep, 0.01, out overlapBrepCrvs, out overlapBrepPts);
 
                                 int ptCount = overlapBrepPts.Length;
                                 int crvCount = overlapBrepCrvs.Length;
@@ -325,7 +313,7 @@ namespace MyProject_0624
                             //so far we should got all the intersection pt on the projected segments 
                             Point3d[] uniquePts = Point3d.CullDuplicates(brepLnIntersectPt, 0.0);
                             List<double> uniParams = new List<double>();
-
+                            /*
 
                             foreach (Point3d uniPt in uniquePts)
                             {
@@ -369,6 +357,7 @@ namespace MyProject_0624
                                     solidSegment.Add(projectedSegment);
                                 }
                             }
+                            */
 
 
 
@@ -451,6 +440,9 @@ namespace MyProject_0624
             //DA.SetDataList(3, unflattenedCrv);
             DA.SetDataList(2, outputMessage);
             DA.SetDataList(3, brepss);
+            DA.SetData(4, cameraPt);
+            DA.SetDataList(5, cornerPts);
+
 
 
 
