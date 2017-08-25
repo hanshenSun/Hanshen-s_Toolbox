@@ -58,6 +58,7 @@
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="AddAttribute_Pts.cs" />
     <Compile Include="BatchAnimation_Rendering.cs" />
+    <Compile Include="getBrepOutline _Brep.cs" />
     <Compile Include="hs_Obj.cs" />
     <Compile Include="DestructAttribute_Crv.cs" />
     <Compile Include="DestructAttribute_Pts.cs" />

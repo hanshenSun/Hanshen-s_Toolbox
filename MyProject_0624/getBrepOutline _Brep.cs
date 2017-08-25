@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Rhino;
 using Rhino.Geometry;
-using Rhino.Display;
 
 namespace MyProject_0624
 {
-    public class GetInfo_ViewPort : GH_Component
+    public class getBrepOutline_Brep : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the MyComponent1 class.
+        /// Initializes a new instance of the getBrepOutline__Brep class.
         /// </summary>
-        public GetInfo_ViewPort()
-          : base("Get Viewport Information", "GetInfo_ViewPort",
-              "Get Camera Target points and viewport plane of the current viewport",
+        public getBrepOutline_Brep()
+          : base("getBrepOutline__Brep", "getBrepOutline__Brep",
+              "get Brep's outline",
               "HS_ToolBox", "ViewPort")
         {
         }
@@ -25,6 +23,8 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddBrepParameter("inputBrep", "Brep", "input brep for outline", GH_ParamAccess.list);
+
         }
 
         /// <summary>
@@ -32,10 +32,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Camera Pt", "Camera", "Camera location of current viewport", GH_ParamAccess.item);
-            pManager.AddPointParameter("Target Pt", "Target", "Target location of current viewport", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Focus Length", "Length", "Focal length of current camera", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("ViewPort Plane", "Plane", "View plan of current viewport", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Outline Crv", "Crv", "Outline Curve of the input brep", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -44,22 +41,13 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            RhinoViewport vp = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport;
-
-            Point3d cameraPt = new Point3d();
-            Point3d targetPt = new Point3d();
-            double focusLength = 35;
-            Plane focusPlane = new Plane();
-
-            hs_functions.getViewportInfo(ref cameraPt, ref targetPt, ref focusPlane, ref focusLength);
+            List<Brep> inputBrep = new List<Brep>();
+            DA.GetDataList(0,inputBrep);
 
 
-            DA.SetData(0, cameraPt);
-            DA.SetData(1, targetPt);
-            DA.SetData(2, focusLength);
-            DA.SetData(3, focusPlane);
+            List<Curve> outlines = hs_functions.getBrepOutline(inputBrep);
 
-
+            DA.SetDataList(0, outlines);
 
 
         }
@@ -73,7 +61,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Properties.Resources.GetInfo_Viewport;
+                return null;
             }
         }
 
@@ -82,7 +70,7 @@ namespace MyProject_0624
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("0d07bf74-9671-4b5b-93ab-afba21d1e188"); }
+            get { return new Guid("3789139d-6668-4fae-870f-b3dd6ec9f8a5"); }
         }
     }
 }
