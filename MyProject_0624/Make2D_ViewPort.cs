@@ -72,71 +72,78 @@ namespace MyProject_0624
                 foreach (Curve brepEdge in inputGeo.Edges)
                 {
                     NurbsCurve singleEdge = brepEdge.ToNurbsCurve();//getting single edgeCurve in each brep
+
+
                     List<Point3d> ptAloneCurve = new List<Point3d>();
+                    List<bool> curveBrepIntersect = new List<bool>();
 
 
 
                     foreach (ControlPoint edgeControlPt in singleEdge.Points)
                     {
-                        ptAloneCurve.Add(edgeControlPt.Location);//getting point location of each edgecurve
+                        Point3d tempControlPtLocation = edgeControlPt.Location;
+
+
+
+
+                        Vector3d projectVector = Point3d.Subtract(tempControlPtLocation, CameraPt);
+                        double distance = CameraPt.DistanceTo(tempControlPtLocation);
+
+                        Line tempProjectLn = new Line(CameraPt, projectVector, distance * 0.95);
+                        Curve tempProjectCrv = new LineCurve(tempProjectLn);
+
+                        Line edgeProjectLn = new Line(tempControlPtLocation, CameraPt);
+                        //getting the projection line of the two ends of the line segments
+
+
+                        double intersectionParameter;
+                        Rhino.Geometry.Intersect.Intersection.LinePlane(edgeProjectLn, TargetPlane, out intersectionParameter);
+
+
+                        Point3d intersectPt = edgeProjectLn.PointAt(intersectionParameter);
+                        ptAloneCurve.Add(intersectPt);//getting point location of each edgecurve//////////////////
+
+
+
+                        Curve[] dummyCrvsA;
+                        Point3d[] dummyPtsA;
+                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrv, inputGeo, tol, out dummyCrvsA, out dummyPtsA);
+
+                        if (dummyPts.Length > 0)
+                        {
+                            curveBrepIntersect.Add(true);
+                        }
+
+
                     }
 
 
-                    
+                    Curve projectedCurve = NurbsCurve.Create(false, ptAloneCurve.Count, ptAloneCurve);
 
-                    for (int i = 0; i < ptAloneCurve.Count - 1; i++)
-                    {
-                        //Line tempLn = new Line(ptAloneCurve[i], ptAloneCurve[i + 1]);//construct line segments
+                    ptAloneCurve.Add(CameraPt);
 
-                        Vector3d projectVectorA = Point3d.Subtract(ptAloneCurve[i], CameraPt);
-                        Vector3d projectVectorB = Point3d.Subtract(ptAloneCurve[i + 1], CameraPt);
-                        double distanceA = CameraPt.DistanceTo(ptAloneCurve[i]);
-                        double distanceB = CameraPt.DistanceTo(ptAloneCurve[i + 1]);
-
-                        Line tempProjectLnA = new Line(CameraPt, projectVectorA, distanceA * 0.95);
-                        Line tempProjectLnB = new Line(CameraPt, projectVectorB, distanceB * 0.95);
-
-                        Curve tempProjectCrvA = new LineCurve(tempProjectLnA);
-                        Curve tempProjectCrvB = new LineCurve(tempProjectLnB);
-
-
-                        Line edgeProjectLnA = new Line(ptAloneCurve[i], CameraPt);
-                        Line edgeProjectLnB = new Line(ptAloneCurve[i + 1], CameraPt);//getting the projection line of the two ends of the line segments
-
-                        
-                        double intersectionParameterA;
-                        double intersectionParameterB;
-
-
-                        Rhino.Geometry.Intersect.Intersection.LinePlane(edgeProjectLnA, TargetPlane, out intersectionParameterA);
-                        Rhino.Geometry.Intersect.Intersection.LinePlane(edgeProjectLnB, TargetPlane, out intersectionParameterB);
-
-
-                        Point3d intersectPtA = edgeProjectLnA.PointAt(intersectionParameterA);
-                        Point3d intersectPtB = edgeProjectLnB.PointAt(intersectionParameterB);
-
-                        LineCurve projectedSegment = new LineCurve(intersectPtA, intersectPtB);//got projected line segments of each edge
-
-                        ////////////////////////////////////////////////////////////////
-                        Curve[] dummyCrvsA;
-                        Point3d[] dummyPtsA;
-                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrvA, inputGeo, tol, out dummyCrvsA, out dummyPtsA);
-
-                        Curve[] dummyCrvsB;
-                        Point3d[] dummyPtsB;
-                        Rhino.Geometry.Intersect.Intersection.CurveBrep(tempProjectCrvB, inputGeo, tol, out dummyCrvsB, out dummyPtsB);
+                    Curve surfaceBoundryCrv = NurbsCurve.Create(true, 1, ptAloneCurve);
+                    Brep[] triangleBrep = Brep.CreatePlanarBreps(surfaceBoundryCrv);
+                    Surface selfTriangleSrf = triangleBrep[0].Surfaces[0];
 
 
 
-                        Curve[] dummyCrvs;
-                        Point3d[] dummyPts;
-                        Surface selfTriangleSrf = NurbsSurface.CreateFromCorners(ptAloneCurve[i], ptAloneCurve[i + 1], CameraPt);
-                        Transform scaleTransform = Transform.Scale(CameraPt, 0.9999);
-                        selfTriangleSrf.Transform(scaleTransform);
-                        bool selfIntersectBool = Rhino.Geometry.Intersect.Intersection.BrepSurface(inputGeo, selfTriangleSrf, tol, out dummyCrvs, out dummyPts);
+
+                    //LineCurve projectedCurve = new LineCurve(intersectPtA, intersectPtB);//got projected line segments of each edge
 
 
-                        bool caseAbool = false;
+
+
+                    Curve[] dummyCrvs;
+                    Point3d[] dummyPts;
+                    Transform scaleTransform = Transform.Scale(CameraPt, 0.9999);
+                    selfTriangleSrf.Transform(scaleTransform);
+                    bool selfIntersectBool = Rhino.Geometry.Intersect.Intersection.BrepSurface(inputGeo, selfTriangleSrf, tol, out dummyCrvs, out dummyPts);
+
+
+
+
+                    bool caseAbool = false;
                         bool partialSelfBool = false;
                         bool caseCBool = false;
                         if (dummyCrvs.Length > 0)
@@ -182,12 +189,12 @@ namespace MyProject_0624
                         {
                             //any of the two end intersections got intersect
                             //therefore its total hidden
-                            hiddenSegment.Add(projectedSegment);
+                            hiddenSegment.Add(projectedCurve);
                         }
                         
                         else if (caseCBool == true)
                         {
-                            separateSolidVoid(inputGeos, currentIndex, projectedSegment, selfTriangleSrf, ref solidSegment, ref hiddenSegment, ref breps);
+                            separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, ref solidSegment, ref hiddenSegment, ref breps);
                         }
 
 
@@ -232,7 +239,7 @@ namespace MyProject_0624
                                 {
                                     //CASE C_ cuz in this case there is no self intersection
                                     /////////////intersectionCrvs_self.Add(projectedSegment);
-                                    solidSegment.Add(projectedSegment);//probaly will never happen
+                                    solidSegment.Add(projectedCurve);//probaly will never happen
 
                                 }
 
@@ -284,7 +291,7 @@ namespace MyProject_0624
                                         if (newDistanceEdgeA[0] < 0.09 && newDistanceEdgeB[0] < 0.09)
                                         {
                                             //totally hidden
-                                            hiddenSegment.Add(projectedSegment);
+                                            hiddenSegment.Add(projectedCurve);
                                         }
 
                                         else
@@ -293,7 +300,7 @@ namespace MyProject_0624
 
 
                                             //dispatchSolidVoid(currentIndex, triangleSrf, inputGeos, projectedSegment, CameraPt, TargetPlane, ref edgeProjectLnA, ref edgeProjectLnB, ref solidSegment, ref hiddenSegment, ref breps);
-                                            separateSolidVoid(inputGeos, currentIndex, projectedSegment, selfTriangleSrf, ref solidSegment, ref hiddenSegment, ref breps);
+                                            separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, ref solidSegment, ref hiddenSegment, ref breps);
                                         }
                                     }
                                 }
@@ -318,7 +325,7 @@ namespace MyProject_0624
 
 
                             //dispatchSolidVoid(currentIndex, triangleSrf, inputGeos, projectedSegment, CameraPt, TargetPlane, ref edgeProjectLnA, ref edgeProjectLnB, ref solidSegment, ref hiddenSegment, ref breps);
-                            separateSolidVoid(inputGeos, currentIndex, projectedSegment, selfTriangleSrf, ref solidSegment, ref hiddenSegment, ref breps);
+                            separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, ref solidSegment, ref hiddenSegment, ref breps);
 
                         }
 
