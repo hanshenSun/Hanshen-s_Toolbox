@@ -124,14 +124,14 @@ namespace MyProject_0624
 
                     Surface simpleTriangle = NurbsSurface.CreateFromCorners(CameraPt, ptAloneCurve[0], ptAloneCurve[controlPtCount-1]);
 
-                    ptAloneCurve.Add(CameraPt);
+                    //ptAloneCurve.Add(CameraPt);
 
                     Curve surfaceBoundryCrv = NurbsCurve.Create(true, 1, ptAloneCurve);
 
-                    Brep[] triangleBrep = Brep.CreatePlanarBreps(surfaceBoundryCrv);
-                    Brep selfTriangleSrf = triangleBrep[0];
-                    //Brep selfTriangleSrf = NurbsSurface.CreateFromPoints(ptAloneCurve, 2, 2, 2, 2).ToBrep();
-
+                    //Brep[] triangleBrep = Brep.CreatePlanarBreps(surfaceBoundryCrv);
+                    //Brep selfTriangleSrf = triangleBrep[0];
+                    Brep selfTriangleSrf = simpleTriangle.ToBrep();
+                    
 
                     Curve[] dummyCrvs;
                     Point3d[] dummyPts;
