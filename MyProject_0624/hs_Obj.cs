@@ -135,27 +135,49 @@ namespace MyProject_0624
             List<Curve> brepOutlines = new List<Curve>();
 
             RhinoViewport vp = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport;
-            
+
             foreach (Brep b in inputBreps)
             {
-                Mesh[] inputMesh = Mesh.CreateFromBrep(b, MeshingParameters.Smooth);
+                Mesh[] inputMesh = Mesh.CreateFromBrep(b, MeshingParameters.Coarse);
 
 
                 Mesh joinedMesh = new Mesh();
                 foreach (Mesh face in inputMesh)
                 {
-                    joinedMesh.Append(face);
+                    joinedMesh.Append(face);//gathering meshes
                 }
-                joinedMesh.Vertices.CombineIdentical(true, true);
+                
+
+                List<Curve> meshOutCrv = new List<Curve>();
 
 
-                Polyline[] meshOutlines = joinedMesh.GetOutlines(vp);
 
-                foreach (Polyline poly in meshOutlines)
+                foreach(Polyline poly in joinedMesh.GetOutlines(vp))
+                {
+                    meshOutCrv.Add(poly.ToNurbsCurve());
+                }
+
+
+                if (meshOutCrv.Count > 1)
+                {
+                    List<Curve> tempCrv = new List<Curve>();
+                    foreach (Curve poly in meshOutCrv)
+                    {
+                        tempCrv.Add(poly.ToNurbsCurve());
+                    }
+
+                    Curve[] joinedMeshOutline = Curve.CreateBooleanUnion(tempCrv);
+                    meshOutCrv = joinedMeshOutline.ToList();
+                }
+                
+
+
+
+                foreach (Curve poly in meshOutCrv)
                 {
                     NurbsCurve tempNurb = poly.ToNurbsCurve();
                     //brepOutlines.Add(tempNurb);
-
+                    
                     List<Point3d> polyLnPt = new List<Point3d>();
                     foreach (ControlPoint ctlPt in tempNurb.Points)
                     {

@@ -23,7 +23,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve for retrieving data", "Crv", "Curve for retrieving data", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Curve for retrieving data", "Crv", "Curve for retrieving data", GH_ParamAccess.item);
 
         }
 
@@ -44,34 +44,30 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<Curve> inputCrvs = new List<Curve>();
+            Curve inputCrvs = new PolyCurve();
             List<string> dictionaryName = new List<string>();
             List<string> dictionaryData = new List<string>();
             
 
-            DA.GetDataList(0, inputCrvs);
-            
-            
+            DA.GetData(0, ref inputCrvs);
 
-            for (int i = 0; i < inputCrvs.Count; i++)
+
+
+            foreach (string tempKeys in inputCrvs.UserDictionary.Keys)
             {
 
-                foreach (string tempKeys in inputCrvs[i].UserDictionary.Keys)
-                {
+                //string[] keyName = new string[] {tempKeys};
 
-                    //string[] keyName = new string[] {tempKeys};
-                    
-                    dictionaryName.Add(tempKeys);
-                }
-                
-                foreach (string tempData in inputCrvs[i].UserDictionary.Values)
-                {
-                    //string[] valueName = new string[] {tempData};
-                    dictionaryData.Add(tempData);
-                }
-
-                
+                dictionaryName.Add(tempKeys);
             }
+
+            foreach (object tempData in inputCrvs.UserDictionary.Values)
+            {
+                //string[] valueName = new string[] {tempData};
+                dictionaryData.Add(tempData.ToString());
+            }
+
+
 
             DA.SetDataList(0, dictionaryName);
             DA.SetDataList(1, dictionaryData);

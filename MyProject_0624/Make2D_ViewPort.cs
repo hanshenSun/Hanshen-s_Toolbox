@@ -117,16 +117,24 @@ namespace MyProject_0624
                         }
                     }
 
-
-
+                    
                     Curve projectedCurve = NurbsCurve.Create(false, nurbsCurveDegree, ptAloneCurveProjected);
+                    //Point3d projectedMid = projectedCurve.PointAt(projectedCurve.Domain.Mid);
+                    Point3d originEdgeStart = singleEdge.PointAt(singleEdge.Domain.Min);
+                    Point3d originEdgeEnd = singleEdge.PointAt(singleEdge.Domain.Max);
+                    double distanceToEdgeStart = CameraPt.DistanceTo(originEdgeStart);
+                    double distanceToEdgeEnd = CameraPt.DistanceTo(originEdgeEnd);
+                    
+
+                    projectedCurve.UserDictionary.Set("distanceToEdge", (distanceToEdgeStart + distanceToEdgeEnd)/2);
 
 
                     Surface simpleTriangle = NurbsSurface.CreateFromCorners(CameraPt, ptAloneCurve[0], ptAloneCurve[controlPtCount-1]);
 
+
                     //ptAloneCurve.Add(CameraPt);
 
-                    Curve surfaceBoundryCrv = NurbsCurve.Create(true, 1, ptAloneCurve);
+                    //Curve surfaceBoundryCrv = NurbsCurve.Create(true, 1, ptAloneCurve);
 
                     //Brep[] triangleBrep = Brep.CreatePlanarBreps(surfaceBoundryCrv);
                     //Brep selfTriangleSrf = triangleBrep[0];
@@ -185,6 +193,7 @@ namespace MyProject_0624
                     {
                         //any of the two end intersections got intersect
                         //therefore its total hidden
+                        projectedCurve.UserDictionary.Set("lineType", "hidden");
                         hiddenSegment.Add(projectedCurve);
                     }
 
@@ -222,6 +231,7 @@ namespace MyProject_0624
                             {
                                 //CASE C_ cuz in this case there is no self intersection
                                 /////////////intersectionCrvs_self.Add(projectedSegment);
+                                projectedCurve.UserDictionary.Set("lineType", "solid");
                                 solidSegment.Add(projectedCurve);//probaly will never happen
                             }
 
@@ -278,6 +288,7 @@ namespace MyProject_0624
                                     if (newDistanceEdgeA[0] < 0.09 && newDistanceEdgeB[0] < 0.09)
                                     {
                                         //totally hidden
+                                        projectedCurve.UserDictionary.Set("lineType", "hidden");
                                         hiddenSegment.Add(projectedCurve);
                                     }
 
@@ -340,6 +351,7 @@ namespace MyProject_0624
             }
             else
             {
+                solidLn.UserDictionary.Set("lineType", "solid");
                 solidSegment.Add(solidLn);//checking if there is only one input brep
                 return;
             }
@@ -375,6 +387,7 @@ namespace MyProject_0624
             //breps.Add(TriangleSrf);////////////////////////////////////
             if (behindBool == false)
             {
+                solidLn.UserDictionary.Set("lineType", "solid");
                 solidSegment.Add(solidLn);
                 return;
             }
@@ -409,16 +422,35 @@ namespace MyProject_0624
                 foreach (Curve crv in brepOutlines)
                 {
                     //Surface extrusionSrfA = Surface.CreateExtrusion(crv, extrusionA);
-                    //Surface extrusionSrfB = Surface.CreateExtrusion(crv, extrusionB);
+                    List<Point3d> edgePts = new List<Point3d>();
+                    foreach (ControlPoint ctlPt in crv.ToNurbsCurve().Points)
+                    {
+                        edgePts.Add(ctlPt.Location);
+                    }
 
+                    Plane tempPlane;
+                    Plane.FitPlaneToPoints(edgePts, out tempPlane);
+                    Vector3d vectorZ = tempPlane.ZAxis;
+                    double multiplier = 1 / vectorZ.Length;
+                    Vector3d extrudeVector = Vector3d.Multiply(multiplier, vectorZ);
+                    
+
+                    Surface extrusionSrf = Surface.CreateExtrusion(crv, extrudeVector);
+                    Brep extrusionBrep = extrusionSrf.ToBrep();
+                    Brep cappedBrep = extrusionBrep.CapPlanarHoles(0.1);
+                    Vector3d moveVector = Vector3d.Multiply(-0.5, extrudeVector);
+                    cappedBrep.Translate(moveVector);
+
+                    outlineExtrusionBreps.Add(cappedBrep);
                     //Brep[] planarsrf = Brep.CreatePlanarBreps(crv);
                     //outlineExtrusionSrfs.Add(planarsrf[0]);
 
-                    Extrusion extrudeA = Rhino.Geometry.Extrusion.Create(crv, 1.0, true);
-                    Extrusion extrudeB = Rhino.Geometry.Extrusion.Create(crv, -1.0, true);
+                    //Extrusion extrudeA = Rhino.Geometry.Extrusion.Create(crv, 1.0, true);
+                    //Extrusion extrudeB = Rhino.Geometry.Extrusion.Create(crv, -1.0, true);
 
-                    Brep cappedBrepA = extrudeA.ToBrep();
-                    Brep cappedBrepB = extrudeB.ToBrep();
+                    //Brep cappedBrepA = extrudeA.ToBrep();
+                    //Brep cappedBrepB = extrudeB.ToBrep();
+
 
                     //Brep extrusionBrepA = Brep.CreateFromSurface(extrusionSrfA);
                     //Brep extrusionBrepB = Brep.CreateFromSurface(extrusionSrfB);
@@ -426,19 +458,29 @@ namespace MyProject_0624
                     //Brep cappedBrepA = extrusionBrepA.CapPlanarHoles(0.5);
                     //Brep cappedBrepB = extrusionBrepB.CapPlanarHoles(0.5;
 
-                    Brep[] cappedBreps = new Brep[] { cappedBrepA, cappedBrepB };
+                    //Brep[] cappedBreps = new Brep[] { cappedBrepA, cappedBrepB };
+                    /*
                     Brep[] unionedSides = Brep.CreateBooleanUnion(cappedBreps, 0.1);
                     foreach (Brep b in unionedSides)
                     {
                         outlineExtrusionBreps.Add(b);
                     }
+                    */
 
                 }
-                
+
+                Brep[] outlineExtrusionBrepsss;
+                if (outlineExtrusionBreps.Count > 1)
+                {
+                    outlineExtrusionBrepsss = Brep.CreateBooleanUnion(outlineExtrusionBreps, 0.1);
+                }
+
+                else
+                {
+                    outlineExtrusionBrepsss = outlineExtrusionBreps.ToArray();
 
 
-
-                Brep[] outlineExtrusionBrepsss = Brep.CreateBooleanUnion(outlineExtrusionBreps, 0.1);
+                }
 
 
 
@@ -473,27 +515,31 @@ namespace MyProject_0624
 
                 List<double> uniqueParams = new List<double>();
 
-                if (uniquePts.Count == 1)
+                object retrievedDist;
+                solidLn.UserDictionary.TryGetValue("distanceToEdge", out retrievedDist);
+
+
+
+                //projectedCurve.UserDictionary.Set("distanceToEdge", distanceToEdge);
+
+                foreach (Point3d uniPt in uniquePts)
                 {
-                    uniqueParams.Add(solidLn.Domain.Mid);
-                }
-                else if (uniquePts.Count > 1)
-                {
-                    foreach (Point3d uniPt in uniquePts)
-                    {
-                        double tempParam;
-                        solidLn.ClosestPoint(uniPt, out tempParam);
-                        uniqueParams.Add(tempParam);
-                    }
+                    double tempParam;
+                    solidLn.ClosestPoint(uniPt, out tempParam);
+                    uniqueParams.Add(tempParam);
                 }
 
-                
+
                 if (uniqueParams.Count > 1)
                 {
 
                     Curve[] splittedSolidLn = solidLn.Split(uniqueParams);
+
+
                     foreach (Curve splitLn in splittedSolidLn)
                     {
+
+                        splitLn.UserDictionary.Set("distanceToEdge", retrievedDist.ToString());
 
                         bool containBool = false;
                         Point3d midPoint = splitLn.PointAt(splitLn.Domain.Mid);
@@ -507,10 +553,12 @@ namespace MyProject_0624
 
                         if (containBool == true)
                         {
+                            splitLn.UserDictionary.Set("lineType", "hidden");
                             hiddenSegment.Add(splitLn);
                         }
                         else
                         {
+                            splitLn.UserDictionary.Set("lineType", "solid");
                             solidSegment.Add(splitLn);
                         }
                     }
@@ -532,10 +580,12 @@ namespace MyProject_0624
 
                     if (containBool == true)
                     {
+                        solidLn.UserDictionary.Set("lineType", "hidden");
                         hiddenSegment.Add(solidLn);
                     }
                     else
                     {
+                        solidLn.UserDictionary.Set("lineType", "solid");
                         solidSegment.Add(solidLn);
                     }
 
@@ -579,8 +629,8 @@ namespace MyProject_0624
             }
 
             List<Brep> booleanedInputGeos = new List<Brep>();
-            Brep[] booleanedBreps = Brep.CreateBooleanUnion(inputBreps, 0.01);
-            foreach (Brep b in booleanedBreps)
+            //Brep[] booleanedBreps = Brep.CreateBooleanUnion(inputBreps, 0.01);
+            foreach (Brep b in inputBreps)
             {
                 if (b != null)
                 {
