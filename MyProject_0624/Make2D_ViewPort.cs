@@ -119,6 +119,8 @@ namespace MyProject_0624
 
                     
                     Curve projectedCurve = NurbsCurve.Create(false, nurbsCurveDegree, ptAloneCurveProjected);
+                    Curve projectedCurveOrigin = NurbsCurve.Create(false, nurbsCurveDegree, ptAloneCurve);
+
                     //Point3d projectedMid = projectedCurve.PointAt(projectedCurve.Domain.Mid);
                     Point3d originEdgeStart = singleEdge.PointAt(singleEdge.Domain.Min);
                     Point3d originEdgeEnd = singleEdge.PointAt(singleEdge.Domain.Max);
@@ -200,7 +202,7 @@ namespace MyProject_0624
                     else if (caseCBool == true)//Case C_Total Solid
                     {
 
-                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, simpleTriangle, ref solidSegment, ref hiddenSegment, ref breps);
+                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, projectedCurveOrigin, selfTriangleSrf, simpleTriangle, ref solidSegment, ref hiddenSegment, ref breps);
                     }
 
 
@@ -295,7 +297,7 @@ namespace MyProject_0624
                                     else
                                     {
 
-                                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, simpleTriangle, ref solidSegment, ref hiddenSegment, ref breps);
+                                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, projectedCurveOrigin, selfTriangleSrf, simpleTriangle, ref solidSegment, ref hiddenSegment, ref breps);
                                     }
                                 }
                             }
@@ -318,7 +320,7 @@ namespace MyProject_0624
 
 
                         //dispatchSolidVoid(currentIndex, triangleSrf, inputGeos, projectedSegment, CameraPt, TargetPlane, ref edgeProjectLnA, ref edgeProjectLnB, ref solidSegment, ref hiddenSegment, ref breps);
-                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, simpleTriangle, ref solidSegment, ref hiddenSegment, ref breps);
+                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, projectedCurveOrigin, selfTriangleSrf, simpleTriangle, ref solidSegment, ref hiddenSegment, ref breps);
 
                     }
 
@@ -332,7 +334,7 @@ namespace MyProject_0624
         }
 
 
-        private static void separateSolidVoid(List<Brep> inputGeos, int currentIndex, Curve solidLn, Brep TriangleSrf, Surface simpleTriangle, ref List<Curve> solidSegment, ref List<Curve> hiddenSegment, ref List<Brep>breps)
+        private static void separateSolidVoid(List<Brep> inputGeos, int currentIndex, Curve solidLn, Curve solidLnOrigin, Brep TriangleSrf, Surface simpleTriangle, ref List<Curve> solidSegment, ref List<Curve> hiddenSegment, ref List<Brep>breps)
         {
             List<Brep> geosForOutline = new List<Brep>();
 
@@ -345,7 +347,16 @@ namespace MyProject_0624
                 {
                     if (tempI != currentIndex)
                     {
-                        geosForOutline.Add(inputGeos[tempI]);
+                        Point3d[] tempPt;
+                        Curve[] tempCrv;
+
+                        Rhino.Geometry.Intersect.Intersection.BrepBrep(TriangleSrf, inputGeos[tempI], out tempCrv,out tempPt );
+
+                        if (tempPt.Length>0 && tempCrv.Length > 0)//if intersect// determind whether this brep in in the front
+                        {
+                            geosForOutline.Add(inputGeos[tempI]);
+                        }
+                        
                     }
                 }
             }
