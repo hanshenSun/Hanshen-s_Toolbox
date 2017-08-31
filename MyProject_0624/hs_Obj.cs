@@ -227,5 +227,49 @@ namespace MyProject_0624
 
         }
 
+        public static bool pointInBreps(Point3d inputPt, Brep closedBrep, double tolerance)
+        {
+            int brepFaceCount = closedBrep.Faces.Count;
+            bool inBrep = false;
+
+
+            List<double> ptAngle = new List<double>();
+            List<Point3d> ptsOnSrf = new List<Point3d>();
+            List<Surface> surfaces = new List<Surface>();
+            for (int i = 0; i < brepFaceCount; i++)
+            {
+                BrepFace bf = closedBrep.Faces[i];
+                Surface bSrf = bf.ToNurbsSurface();
+                surfaces.Add(bSrf);
+
+                double tempU;
+                double tempV;
+                bf.ClosestPoint(inputPt, out tempU, out tempV);
+                Point3d ptOnSrf = bf.PointAt(tempU, tempV);
+                
+                Vector3d tempVector = Point3d.Subtract(ptOnSrf, inputPt);
+                Plane tempPlane;
+                bf.FrameAt(tempU, tempV, out tempPlane);
+
+                Vector3d brepVector = tempPlane.ZAxis;
+
+                double vectorAngle = Vector3d.VectorAngle(tempVector, brepVector)* 57.2958;
+
+                if (vectorAngle > -10 && vectorAngle < 10)
+                {
+                    ptAngle.Add(vectorAngle);
+                }
+            }
+            
+            if (ptAngle.Count == brepFaceCount)
+            {
+                inBrep = true;
+            }
+
+            return inBrep;
+
+
+        }
+
     }
 }
