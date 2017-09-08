@@ -242,14 +242,18 @@ namespace MyProject_0624
                 Surface bSrf = bf.ToNurbsSurface();
                 surfaces.Add(bSrf);
 
-                double tempU;
-                double tempV;
-                bf.ClosestPoint(inputPt, out tempU, out tempV);
-                Point3d ptOnSrf = bf.PointAt(tempU, tempV);
+                //double tempU;
+                //double tempV;
+                //bf.ClosestPoint(inputPt, out tempU, out tempV);
+                //Point3d ptOnSrf = bf.PointAt(tempU, tempV);
                 
-                Vector3d tempVector = Point3d.Subtract(ptOnSrf, inputPt);
+                
                 Plane tempPlane;
-                bf.FrameAt(tempU, tempV, out tempPlane);
+                bf.FrameAt(bSrf.Domain(0).Mid, bSrf.Domain(1).Mid, out tempPlane);
+
+                Point3d ptOnSrf = tempPlane.ClosestPoint(inputPt);
+
+                Vector3d tempVector = Point3d.Subtract(ptOnSrf, inputPt);
 
                 Vector3d brepVector = tempPlane.ZAxis;
 
