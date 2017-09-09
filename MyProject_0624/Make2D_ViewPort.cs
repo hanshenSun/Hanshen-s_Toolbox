@@ -432,11 +432,9 @@ namespace MyProject_0624
 
                     if (flatBool == false)
                     {
-                        foreach(Point3d pt in edgePts)
-                        {
-                            projectedPt.Add(tempPlane.ClosestPoint(pt));
-                        }
-                        baseCrv = new PolylineCurve(projectedPt);
+
+                        baseCrv = Curve.ProjectToPlane(polylineBoundry, tempPlane);
+                        flatBool = baseCrv.IsPlanar();
                     }
 
                     CurveOrientation orient = baseCrv.ClosedCurveOrientation(Plane.WorldXY);
@@ -447,7 +445,7 @@ namespace MyProject_0624
 
                     Extrusion extrudedBrep = Extrusion.Create(baseCrv, 1.0, true);
                     Brep cappedBrep = extrudedBrep.ToBrep();
-                    Vector3d moveVector = Vector3d.Multiply(-0.5, extrudeVector);
+                    Vector3d moveVector = Vector3d.Multiply(0.5, extrudeVector);
                     cappedBrep.Translate(moveVector);
 
 
@@ -483,12 +481,14 @@ namespace MyProject_0624
                 Point3d solidLnEndPt = solidLn.PointAtEnd;
 
 
+                outputPoly.Add(solidLn);///////////////////////////////////////////////
+
                 foreach (Brep b in outlineExtrusionBrepsss)
                 {
                     //breps.Add(b);
                     Curve[] tempCrv;
                     Point3d[] tempPt;
-                    Rhino.Geometry.Intersect.Intersection.CurveBrep(solidLn, b, tol, out tempCrv, out tempPt);
+                    Rhino.Geometry.Intersect.Intersection.CurveBrep(solidLn, b, 0.01, out tempCrv, out tempPt);
 
 
 
