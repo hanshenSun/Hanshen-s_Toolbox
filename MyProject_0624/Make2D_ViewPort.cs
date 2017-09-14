@@ -445,8 +445,8 @@ namespace MyProject_0624
 
                     Extrusion extrudedBrep = Extrusion.Create(baseCrv, 1.0, true);
                     Brep cappedBrep = extrudedBrep.ToBrep();
-                    Vector3d moveVector = Vector3d.Multiply(0.5, extrudeVector);
-                    cappedBrep.Translate(moveVector);
+                    //Vector3d moveVector = Vector3d.Multiply(0.5, extrudeVector);
+                    //cappedBrep.Translate(moveVector);
 
 
                     outlineExtrusionBreps.Add(cappedBrep);
@@ -565,7 +565,7 @@ namespace MyProject_0624
                     foreach (Brep inclusionBrep in outlineExtrusionBrepsss)
                     {
                         
-                        if (inclusionBrep.IsPointInside(midPoint, tol, true))
+                        if (inclusionBrep.IsPointInside(midPoint, tol, false))
                         {
                             containBool = true;
                         }
