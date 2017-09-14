@@ -538,7 +538,7 @@ namespace MyProject_0624
                         curveMid.Add(splitMidPoint);
                         foreach (Brep inclusionBrep in outlineExtrusionBrepsss)
                         {
-                            if (inclusionBrep.IsPointInside(splitMidPoint, tol, true))
+                            if (inclusionBrep.IsPointInside(splitMidPoint, tol, false))
                             {
                                 containBool = true;
                             }
