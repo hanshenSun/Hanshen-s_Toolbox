@@ -27,7 +27,6 @@ namespace MyProject_0624
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGeometryParameter("Geometry for Making2D", "Geometry", "List of geometries for making 2d", GH_ParamAccess.list);
-            //pManager.AddPointParameter("Camera Location", "Camera", "Camera Pt",GH_ParamAccess.item);
             pManager.AddBooleanParameter("start?", "start?", "start?", GH_ParamAccess.item);
             pManager.AddBooleanParameter("hiddenLine?", "hidden?", "show hidden line?", GH_ParamAccess.item);
             pManager[1].Optional = true;
@@ -39,14 +38,11 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            //pManager.AddLineParameter("Output 2D Curves", "Curves", "Flattened 2D Curves", GH_ParamAccess.list);
+            
             pManager.AddGeometryParameter("Solid Crv", "Solid", "Solid Crv", GH_ParamAccess.list);
             pManager.AddGeometryParameter("Hidden Crv", "Hidden", "Hidden Crv", GH_ParamAccess.list);
-            pManager.AddTextParameter("Message", "Message", "Message", GH_ParamAccess.list);
             pManager.AddBrepParameter("B", "B", "B", GH_ParamAccess.list);
             pManager.AddPointParameter("Cam", "Cam", "Cam", GH_ParamAccess.item);
-            pManager.AddPointParameter("corner", "corner", "corner", GH_ParamAccess.list);
-            pManager.AddCurveParameter("c", "c", "c", GH_ParamAccess.list);
 
 
         }
@@ -55,7 +51,7 @@ namespace MyProject_0624
 
 
 
-        private static void makeTwoD(List<Brep> inputGeos, Point3d CameraPt, Plane TargetPlane ,bool hiddenlnBool, double tol, ref List<string> message, ref List<Curve> hiddenSegment_All, ref List<Curve> solidSegment_All, ref List<Brep> breps, ref List<Point3d> curveMid, ref List<Curve> outputPoly)
+        private static void makeTwoD(List<Brep> inputGeos, Point3d CameraPt, Plane TargetPlane ,bool hiddenlnBool, double tol, ref List<Curve> hiddenSegment_All, ref List<Curve> solidSegment_All, ref List<Brep> breps)
         {
             
             List<Curve> solidSegment = new List<Curve>();
@@ -73,12 +69,11 @@ namespace MyProject_0624
                 {
                     NurbsCurve singleEdge = brepEdge.ToNurbsCurve();//getting single edgeCurve in each brep
 
-
-
+                    
                     List<Point3d> ptAloneCurve = new List<Point3d>();
                     List<Point3d> ptAloneCurveProjected = new List<Point3d>();
-                    //List<Line> edgeProjectLnSS = new List<Line>();
                     List<bool> curveBrepIntersect = new List<bool>();
+
 
                     int controlPtCount = singleEdge.Points.Count();
                     int nurbsCurveDegree = singleEdge.Degree;
@@ -119,27 +114,22 @@ namespace MyProject_0624
 
                     
                     Curve projectedCurve = NurbsCurve.Create(false, nurbsCurveDegree, ptAloneCurveProjected);
-                    Curve projectedCurveOrigin = NurbsCurve.Create(false, nurbsCurveDegree, ptAloneCurve);
-
-                    //Point3d projectedMid = projectedCurve.PointAt(projectedCurve.Domain.Mid);
-                    Point3d originEdgeStart = singleEdge.PointAt(singleEdge.Domain.Min);
-                    Point3d originEdgeEnd = singleEdge.PointAt(singleEdge.Domain.Max);
-                    double distanceToEdgeStart = CameraPt.DistanceTo(originEdgeStart);
-                    double distanceToEdgeEnd = CameraPt.DistanceTo(originEdgeEnd);
+                    //Curve projectedCurveOrigin = NurbsCurve.Create(false, nurbsCurveDegree, ptAloneCurve);
                     
+                    //Point3d originEdgeStart = singleEdge.PointAt(singleEdge.Domain.Min);
+                    Point3d originEdgeMid = singleEdge.PointAt(singleEdge.Domain.Mid);
+                    //Point3d originEdgeEnd = singleEdge.PointAt(singleEdge.Domain.Max);
+                    //double distanceToEdgeStart = CameraPt.DistanceTo(originEdgeStart);
+                    //double distanceToEdgeEnd = CameraPt.DistanceTo(originEdgeEnd);
 
-                    projectedCurve.UserDictionary.Set("distanceToEdge", (distanceToEdgeStart + distanceToEdgeEnd)/2);
+
+                    //projectedCurve.UserDictionary.Set("distanceToEdge", (distanceToEdgeStart + distanceToEdgeEnd)/2);////////setting lineweight
+                    projectedCurve.UserDictionary.Set("distanceToEdge", CameraPt.DistanceTo(originEdgeMid));////////setting lineweight
 
 
                     Surface simpleTriangle = NurbsSurface.CreateFromCorners(CameraPt, ptAloneCurve[0], ptAloneCurve[controlPtCount-1]);
 
-
-                    //ptAloneCurve.Add(CameraPt);
-
-                    //Curve surfaceBoundryCrv = NurbsCurve.Create(true, 1, ptAloneCurve);
-
-                    //Brep[] triangleBrep = Brep.CreatePlanarBreps(surfaceBoundryCrv);
-                    //Brep selfTriangleSrf = triangleBrep[0];
+                    
                     Brep selfTriangleSrf = simpleTriangle.ToBrep();
                     
 
@@ -202,7 +192,7 @@ namespace MyProject_0624
                     else if (caseCBool == true)//Case C_Total Solid
                     {
 
-                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, projectedCurveOrigin, selfTriangleSrf, simpleTriangle, tol,ref solidSegment, ref hiddenSegment, ref breps, ref curveMid, ref outputPoly);
+                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, tol,ref solidSegment, ref hiddenSegment, ref breps);
                     }
 
 
@@ -297,7 +287,7 @@ namespace MyProject_0624
                                     else
                                     {
 
-                                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, projectedCurveOrigin, selfTriangleSrf, simpleTriangle, tol ,ref solidSegment, ref hiddenSegment, ref breps, ref curveMid, ref outputPoly);
+                                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf,tol ,ref solidSegment, ref hiddenSegment, ref breps);
                                     }
                                 }
                             }
@@ -306,7 +296,7 @@ namespace MyProject_0624
 
 
 
-                    else
+                    else//if more than two object
                     {
                         //Case BC
                         //Surface triangleSrf = NurbsSurface.CreateFromCorners(ptAloneCurve[i], ptAloneCurve[i + 1], CameraPt);//created the triangle surface
@@ -320,7 +310,7 @@ namespace MyProject_0624
 
 
                         //dispatchSolidVoid(currentIndex, triangleSrf, inputGeos, projectedSegment, CameraPt, TargetPlane, ref edgeProjectLnA, ref edgeProjectLnB, ref solidSegment, ref hiddenSegment, ref breps);
-                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, projectedCurveOrigin, selfTriangleSrf, simpleTriangle, tol,ref solidSegment, ref hiddenSegment, ref breps, ref curveMid, ref outputPoly);
+                        separateSolidVoid(inputGeos, currentIndex, projectedCurve, selfTriangleSrf, tol,ref solidSegment, ref hiddenSegment, ref breps);
 
                     }
 
@@ -334,11 +324,10 @@ namespace MyProject_0624
         }
 
 
-        private static void separateSolidVoid(List<Brep> inputGeos, int currentIndex, Curve solidLn, Curve solidLnOrigin, Brep TriangleSrf, Surface simpleTriangle, double tol ,ref List<Curve> solidSegment, ref List<Curve> hiddenSegment, ref List<Brep>breps, ref List<Point3d> curveMid, ref List<Curve> outputPoly)
+        private static void separateSolidVoid(List<Brep> inputGeos, int currentIndex, Curve solidLn, Brep TriangleSrf, double tol ,ref List<Curve> solidSegment, ref List<Curve> hiddenSegment, ref List<Brep>breps)
         {
             List<Brep> geosForOutline = new List<Brep>();
 
-            
             
 
             if (inputGeos.Count > 1)
@@ -355,11 +344,12 @@ namespace MyProject_0624
                         if (tempPt.Length>0 || tempCrv.Length > 0)//if intersect// determind whether this brep in in the front
                         {
                             geosForOutline.Add(inputGeos[tempI]);
-                        }
-                        
+                        }        
                     }
                 }
             }
+
+
             else
             {
                 solidLn.UserDictionary.Set("lineType", "solid");
@@ -368,26 +358,24 @@ namespace MyProject_0624
             }
 
 
-            bool behindBool = false;
+            bool behindBool = false;//initializing 
             
             if (geosForOutline.Count > 0)
             {
                 behindBool = true;
             }
 
-
-
-
-            //breps.Add(TriangleSrf);////////////////////////////////////
+            
             if (behindBool == false)
             {
                 solidLn.UserDictionary.Set("lineType", "solid");
                 solidSegment.Add(solidLn);
                 return;
             }
+
             else
             {
-                List<Curve> brepOutlines = hs_functions.getBrepOutline(geosForOutline);//////////////////
+                List<Curve> brepOutlines = hs_functions.getBrepOutline(geosForOutline);
 
 
 
@@ -398,17 +386,12 @@ namespace MyProject_0624
                 double FocusLength = 35;
 
                 hs_functions.getViewportInfo(ref CameraPt, ref TargetPt, ref TargetPlane, ref FocusLength);//getting essential
-
                 
 
-                //Vector3d extrusionA = Vector3d.Multiply(0.1, TargetPlane.ZAxis);
-                //Vector3d extrusionB = Vector3d.Multiply(-0.1, TargetPlane.ZAxis);
-
                 List<Brep> outlineExtrusionBreps = new List<Brep>();
-                //List<Brep> outlineExtrusionSrfs = new List<Brep>();
                 foreach (Curve crv in brepOutlines)
                 {
-                    //Surface extrusionSrfA = Surface.CreateExtrusion(crv, extrusionA);
+                    
                     List<Point3d> edgePts = new List<Point3d>();
                     foreach (ControlPoint ctlPt in crv.ToNurbsCurve().Points)
                     {
@@ -417,7 +400,9 @@ namespace MyProject_0624
 
 
                     Plane tempPlane;
-                    Plane.FitPlaneToPoints(edgePts, out tempPlane);
+                    Plane.FitPlaneToPoints(edgePts, out tempPlane);//construct a plane from the boundrycurve endpoints
+
+
                     Vector3d vectorZ = tempPlane.ZAxis;
                     double multiplier = 1 / vectorZ.Length;
                     Vector3d extrudeVector = Vector3d.Multiply(multiplier, vectorZ);
@@ -425,11 +410,9 @@ namespace MyProject_0624
                     Curve polylineBoundry = new PolylineCurve(edgePts);
                     bool flatBool = crv.IsPlanar();
                     List<Point3d> projectedPt = new List<Point3d>();
-
-
+                    
                     Curve baseCrv = crv;
-
-
+                    
                     if (flatBool == false)
                     {
 
@@ -440,15 +423,12 @@ namespace MyProject_0624
                     CurveOrientation orient = baseCrv.ClosedCurveOrientation(Plane.WorldXY);
                     if (orient != CurveOrientation.Clockwise) baseCrv.Reverse();
 
-
-
-
+                    
                     Extrusion extrudedBrep = Extrusion.Create(baseCrv, 1.0, true);
                     Brep cappedBrep = extrudedBrep.ToBrep();
                     //Vector3d moveVector = Vector3d.Multiply(0.5, extrudeVector);
                     //cappedBrep.Translate(moveVector);
-
-
+                    
                     outlineExtrusionBreps.Add(cappedBrep);
                    
 
@@ -475,13 +455,11 @@ namespace MyProject_0624
 
 
                 List<Point3d> uniquePts = new List<Point3d>();
-
-
                 Point3d solidLnStartPt = solidLn.PointAtStart;
                 Point3d solidLnEndPt = solidLn.PointAtEnd;
 
 
-                outputPoly.Add(solidLn);///////////////////////////////////////////////
+                //outputPoly.Add(solidLn);///////////////////////////////////////////////
 
                 foreach (Brep b in outlineExtrusionBrepsss)
                 {
@@ -491,14 +469,31 @@ namespace MyProject_0624
                     Rhino.Geometry.Intersect.Intersection.CurveBrep(solidLn, b, 0.01, out tempCrv, out tempPt);
 
 
-
-                    foreach (Point3d pt in tempPt)
+                    if (tempPt!=null)
                     {
-                        if (pt.DistanceTo(solidLnStartPt) > 0.01 && pt.DistanceTo(solidLnEndPt) > 0.01)
+                        foreach (Point3d pt in tempPt)
                         {
-                            uniquePts.Add(pt);//not close to 
+                            if (pt.DistanceTo(solidLnStartPt) > 0.01 && pt.DistanceTo(solidLnEndPt) > 0.01)
+                            {
+                                uniquePts.Add(pt);//not close to 
+                            }
                         }
                     }
+
+                    if (tempCrv != null)
+                    {
+                        foreach (Curve crv in tempCrv)
+                        {
+                            if (crv.PointAtStart.DistanceTo(solidLnStartPt) > tol && crv.PointAtStart.DistanceTo(solidLnEndPt) > tol){
+                                uniquePts.Add(crv.PointAtStart);
+                            }
+                            if (crv.PointAtEnd.DistanceTo(solidLnStartPt) > tol && crv.PointAtEnd.DistanceTo(solidLnEndPt) > tol)
+                            {
+                                uniquePts.Add(crv.PointAtEnd);
+                            }
+                        }
+                    }
+                    
 
                     
                 }
@@ -509,10 +504,7 @@ namespace MyProject_0624
 
                 object retrievedDist;
                 solidLn.UserDictionary.TryGetValue("distanceToEdge", out retrievedDist);
-
-
-
-                //projectedCurve.UserDictionary.Set("distanceToEdge", distanceToEdge);
+                
 
                 foreach (Point3d uniPt in uniquePts)
                 {
@@ -526,8 +518,6 @@ namespace MyProject_0624
                 {
 
                     Curve[] splittedSolidLn = solidLn.Split(uniqueParams);
-
-
                     foreach (Curve splitLn in splittedSolidLn)
                     {
 
@@ -535,7 +525,7 @@ namespace MyProject_0624
 
                         bool containBool = false;
                         Point3d splitMidPoint = splitLn.PointAt(splitLn.Domain.Mid);
-                        curveMid.Add(splitMidPoint);
+                        
                         foreach (Brep inclusionBrep in outlineExtrusionBrepsss)
                         {
                             if (inclusionBrep.IsPointInside(splitMidPoint, tol, false))
@@ -623,7 +613,7 @@ namespace MyProject_0624
             }
 
             List<Brep> booleanedInputGeos = new List<Brep>();
-            //Brep[] booleanedBreps = Brep.CreateBooleanUnion(inputBreps, 0.01);
+
             foreach (Brep b in inputBreps)
             {
                 if (b != null)
@@ -631,9 +621,13 @@ namespace MyProject_0624
                     booleanedInputGeos.Add(b);
                 }
             }
-
+            //////////////////////////////////////////////////////////////
             DA.GetData(1, ref startBool);
             DA.GetData(2, ref hiddenBool);
+
+
+
+
 
             RhinoViewport vp = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport;
             
@@ -656,31 +650,31 @@ namespace MyProject_0624
 
             intersectionPlane.Translate(planeMoveVector);
 
-
-
-
-
-            List<Point3d> corners = new List<Point3d>();
             
-
-
+            //List<Point3d> corners = new List<Point3d>();
             List<Curve> solidLines = new List<Curve>();
             List<Curve> dashLines = new List<Curve>();
             List<Brep> brepss = new List<Brep>();
-
             List<Point3d> curveMid = new List<Point3d>();
+
             double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
 
-            makeTwoD(booleanedInputGeos, cameraPt, intersectionPlane, hiddenBool, tolerance, ref outputMessage, ref dashLines, ref solidLines, ref brepss, ref curveMid, ref outputPoly);
+
+            if (startBool)
+            {
+                makeTwoD(booleanedInputGeos, cameraPt, intersectionPlane, hiddenBool, tolerance, ref dashLines, ref solidLines, ref brepss);
+            }
+            
 
             DA.SetDataList(0, solidLines);
-            DA.SetDataList(1, dashLines);
-            //DA.SetDataList(3, unflattenedCrv);
-            DA.SetDataList(2, outputMessage);
-            DA.SetDataList(3, brepss);
-            DA.SetData(4, cameraPt);
-            DA.SetDataList(5, curveMid);
-            DA.SetDataList(6, outputPoly);
+            DA.SetDataList(2, brepss);
+            DA.SetData(3, cameraPt);
+
+
+            if (hiddenBool)
+            {
+                DA.SetDataList(1, dashLines);
+            }
             
 
 

@@ -72,7 +72,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Silhouette_ViewPort.cs" />
     <Compile Include="StringMatchIndex_String.cs" />
     <Compile Include="ZoomIterator_Obj.cs" />
     <Compile Include="DirectionUnifier_Crv.cs" />
