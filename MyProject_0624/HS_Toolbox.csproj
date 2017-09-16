@@ -57,15 +57,16 @@
     <Compile Include="AddAttribute_Pts.cs" />
     <Compile Include="BatchAnimation_Rendering.cs" />
     <Compile Include="getBrepOutline _Brep.cs" />
+    <Compile Include="getElevation_GIS.cs" />
     <Compile Include="hs_Obj.cs" />
     <Compile Include="DestructAttribute_Crv.cs" />
     <Compile Include="DestructAttribute_Pts.cs" />
     <Compile Include="GetCenterline_Pipe.cs" />
     <Compile Include="InBrep_Pts.cs" />
     <Compile Include="isLinear.cs" />
-    <Compile Include="GetInfo_ViewPort.cs" />
-    <Compile Include="Make2D_ViewPort.cs" />
-    <Compile Include="SetCamera_ViewPort.cs" />
+    <Compile Include="_ViewPort\GetInfo_ViewPort.cs" />
+    <Compile Include="_ViewPort\Make2D_ViewPort.cs" />
+    <Compile Include="_ViewPort\SetCamera_ViewPort.cs" />
     <Compile Include="SetIntersectionDiff_String.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -73,7 +74,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StringMatchIndex_String.cs" />
-    <Compile Include="ZoomIterator_Obj.cs" />
+    <Compile Include="_ViewPort\ZoomIterator_ViewPort.cs" />
     <Compile Include="DirectionUnifier_Crv.cs" />
     <None Include="CloestCrvInRadius.cs" />
     <Compile Include="HS_ToolboxInfo.cs" />
