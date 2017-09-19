@@ -56,8 +56,8 @@ namespace MyProject_0624
             DA.GetData(1, ref inputLongitude);
             DA.GetData(2, ref resCount);
 
-            string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?";
-            string path = inputLongitude.ToString() + "|" + inputLatitude.ToString();
+            string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?path=";
+            string path = inputLongitude + "|" + inputLatitude;
             string actualUrl = ELEVATION_BASE_URL + path + "&samples=" + resCount;
 
 
@@ -65,7 +65,7 @@ namespace MyProject_0624
 
             WebClient wc = new WebClient();
 
-            var js = wc.DownloadString("https://maps.googleapis.com/maps/api/elevation/json?path=36.578581,-118.291994|36.23998,-116.83171&samples=3");
+            var js = wc.DownloadString(actualUrl);
             JObject json = JObject.Parse(js);
             //JsonConvert.DeserializeObject<>(js);
 
@@ -76,9 +76,10 @@ namespace MyProject_0624
             
             foreach (var resultset in json["results"])
             {
-                string str = esultset["elevation"].ToString();
-                double dou = double.TryParse(str);
-                elevationData.Add(dou);
+                string elevationStr = resultset["elevation"].ToString();
+                double elevationDouble = Convert.ToDouble(elevationStr);
+
+                elevationData.Add(elevationDouble);
             }
             
             DA.SetDataList(0, elevationData);
