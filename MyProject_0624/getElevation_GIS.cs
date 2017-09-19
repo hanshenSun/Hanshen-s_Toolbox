@@ -18,7 +18,7 @@ namespace MyProject_0624
         public getElevation_GIS()
           : base("getElevation_GIS", "getElevation",
               "Get Elevation data in meters using Google Elevation API",
-              "HS_ToolBox", "ViewPort")
+              "HS_ToolBox", "GIS")
         {
         }
 
