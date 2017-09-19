@@ -32,3 +32,5 @@ C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\M
 C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\HS_Toolbox.csproj.GenerateResource.Cache
 C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.dll
 C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\MyProject_0624.pdb
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\Newtonsoft.Json.dll
+C:\Users\Hanshen\Documents\GitHub\Hanshen-s_Toolbox\MyProject_0624\bin\Newtonsoft.Json.xml
