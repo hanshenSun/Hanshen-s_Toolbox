@@ -23,9 +23,9 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Lat", "Latitude", "Latitude", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Lon", "Longitude", "Longitude", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Res", "Resolution", "Resolution", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Lat", "Latitude", "Latitude", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Lon", "Longitude", "Longitude", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Res", "Resolution", "Resolution", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,6 +33,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddNumberParameter("Elevation", "Elevation", "Elevation in meters", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -41,6 +42,20 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            double inputLatitude = 0.0;
+            double inputLongitude = 0.0;
+            int resCount = 10;
+
+            DA.GetData(0, ref inputLatitude);
+            DA.GetData(1, ref inputLongitude);
+            DA.GetData(2, ref resCount);
+
+            string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?";
+            string path = inputLongitude.ToString() + "|" + inputLatitude.ToString();
+            string actualUrl = ELEVATION_BASE_URL + path + "&samples=" + resCount;
+
+
+
         }
 
         /// <summary>
