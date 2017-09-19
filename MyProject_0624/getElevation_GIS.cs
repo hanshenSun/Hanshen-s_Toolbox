@@ -65,18 +65,20 @@ namespace MyProject_0624
 
             WebClient wc = new WebClient();
 
-            var js = wc.DownloadString(actualUrl);
+            var js = wc.DownloadString("https://maps.googleapis.com/maps/api/elevation/json?path=36.578581,-118.291994|36.23998,-116.83171&samples=3");
             JObject json = JObject.Parse(js);
             //JsonConvert.DeserializeObject<>(js);
 
 
-            List<string> elevationData = new List<string>();
+            List<double> elevationData = new List<double>();
 
             
             
             foreach (var resultset in json["results"])
             {
-                elevationData.Add(resultset["elevation"].ToString());
+                string str = esultset["elevation"].ToString();
+                double dou = double.TryParse(str);
+                elevationData.Add(dou);
             }
             
             DA.SetDataList(0, elevationData);
