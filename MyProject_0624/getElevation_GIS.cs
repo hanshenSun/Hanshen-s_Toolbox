@@ -99,7 +99,7 @@ namespace MyProject_0624
 
 
             inputLongitudeA = inputLongitude[0].ToString();
-            inputLongitudeB = inputLongitude[0].ToString();
+            inputLongitudeB = inputLongitude[1].ToString();
 
 
             string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?path=";
