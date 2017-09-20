@@ -27,8 +27,8 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Lat", "Latitude", "Latitude", GH_ParamAccess.item);
-            pManager.AddTextParameter("Lon", "Longitude", "Longitude", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Lat", "Latitude", "Latitude", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Lon", "Longitude", "Longitude", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Res", "Resolution", "Resolution", GH_ParamAccess.item);
             pManager[0].Optional = true;
             pManager[1].Optional = true;
@@ -48,16 +48,62 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            string inputLatitude = "36.578581,-118.291994";
-            string inputLongitude = "36.23998,-116.83171";
+            /*
+            string inputLatitudeA = "36.578581";
+            string inputLatitudeB = "-118.291994";
+            string inputLongitudeA = "36.23998";
+            string inputLongitudeB = "-116.83171";
+            */
+            List<double> inputLatitude = new List<double>();
+            List<double> inputLongitude = new List<double>();
+
             int resCount = 10;
 
-            DA.GetData(0, ref inputLatitude);
-            DA.GetData(1, ref inputLongitude);
+
+            DA.GetDataList(0, inputLatitude);
+            DA.GetDataList(1,  inputLongitude);
             DA.GetData(2, ref resCount);
 
+            int countA = inputLongitude.Count;
+            int coutB = inputLatitude.Count;
+
+            string inputLatitudeA = "36.578581";
+            string inputLatitudeB = "-118.291994";
+            string inputLongitudeA = "36.23998";
+            string inputLongitudeB = "-116.83171";
+
+            inputLatitudeA = inputLatitude[0].ToString();
+            inputLatitudeB = inputLatitude[1].ToString();
+
+            /*
+            if (inputLongitude[0] < 0)
+            {
+                inputLongitudeA = "%20" + inputLongitude[0].ToString();
+            }
+
+            else
+            {
+                inputLongitudeA = inputLongitude[0].ToString();
+            }
+
+            if (inputLongitude[1] < 0)
+            {
+                inputLongitudeB = "%20" + inputLongitude[0].ToString();
+            }
+
+            else
+            {
+                inputLongitudeB = inputLongitude[0].ToString();
+            }
+            */
+
+
+            inputLongitudeA = inputLongitude[0].ToString();
+            inputLongitudeB = inputLongitude[0].ToString();
+
+
             string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?path=";
-            string path = inputLongitude + "|" + inputLatitude;
+            string path = inputLatitudeA + "," + inputLongitudeA +   " | " + inputLatitudeB + "," + inputLongitudeB;
             string actualUrl = ELEVATION_BASE_URL + path + "&samples=" + resCount;
 
 

@@ -7,12 +7,12 @@ using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class ptToEarthCoordinates_Gis : GH_Component
+    public class ptToEarthCoordinates_GIS : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the ptToEarthPt class.
         /// </summary>
-        public ptToEarthCoordinates_Gis()
+        public ptToEarthCoordinates_GIS()
           : base("ptToEarthPt", "ptToEarthPt",
               "Converts Rhino Coordinates to Longitude and Latitude",
               "HS_ToolBox", "GIS")
@@ -49,13 +49,8 @@ namespace MyProject_0624
 
             DA.GetData(0, ref inputPt);
 
-            EarthAnchorPoint eaPt = new EarthAnchorPoint();
-            eaPt.ModelBasePoint = inputPt;
-            Rhino.UnitSystem us = Rhino.RhinoDoc.ActiveDoc.ModelUnitSystem;
-
-            eaPt.GetModelToEarthTransform(us);
-            latitude = eaPt.EarthBasepointLatitude;
-            longitude = eaPt.EarthBasepointLongitude;
+            longitude = MercatorProjection.xToLon(inputPt.X);
+            latitude = MercatorProjection.yToLat(inputPt.Y);
 
             DA.SetData(0, latitude);
             DA.SetData(1, longitude);
