@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Rhino.DocObjects;
 using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class PtToEarthCoordinates_GIS : GH_Component
+    public class EarthCoordinatesToXY : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the ptToEarthPt class.
+        /// Initializes a new instance of the EarthCoordinatesToXY class.
         /// </summary>
-        public PtToEarthCoordinates_GIS()
-          : base("ptToEarthPt", "ptToEarthPt",
-              "Converts Rhino Coordinates to Longitude and Latitude using Mercator Projection",
+        public EarthCoordinatesToXY()
+          : base("EarthCoordinatesToXY", "EarthCoordinatesToXY",
+              "Convert Latitude and Longitude to XY data using Mercator Projection",
               "HS_ToolBox", "GIS")
         {
         }
@@ -24,8 +23,8 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("pt", "pt", "qury point", GH_ParamAccess.item);
-
+            pManager.AddNumberParameter("Lat", "Lat", "Latitude", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Lon", "Lon", "Longitude", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,8 +32,7 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Lat", "Lat", "Latitude", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Lon", "Lon", "Longitude", GH_ParamAccess.item);
+            pManager.AddPointParameter("XY Point", "XY Point", "XY Point", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,17 +41,19 @@ namespace MyProject_0624
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Point3d inputPt = new Point3d();
-            double longitudeX = 0.0;
-            double latitudeY = 0.0;
+            double latitude = 0.0;
+            double longitude = 0.0;
 
-            DA.GetData(0, ref inputPt);
+            DA.GetData(0, ref latitude);
+            DA.GetData(1, ref longitude);
 
-            longitudeX = MercatorProjection.xToLon(inputPt.X);
-            latitudeY = MercatorProjection.yToLat(inputPt.Y);
+            double latitudeY = MercatorProjection.latToY(latitude);
+            double latitudeX = MercatorProjection.lonToX(longitude);
 
-            DA.SetData(0, latitudeY);
-            DA.SetData(1, longitudeX);
+
+            Point3d quryedPt = new Point3d(latitudeX, latitudeY, 0);
+            DA.SetData(0, quryedPt);
+
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace MyProject_0624
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("d1757957-c918-4f6c-875c-ad7be7b0e6d4"); }
+            get { return new Guid("201a98a7-899b-491a-85c1-aaef4b709c19"); }
         }
     }
 }

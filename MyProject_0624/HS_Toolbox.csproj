@@ -59,6 +59,7 @@
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="AddAttribute_Pts.cs" />
     <Compile Include="BatchAnimation_Rendering.cs" />
+    <Compile Include="EarthCoordinatesToXY.cs" />
     <Compile Include="getBrepOutline _Brep.cs" />
     <Compile Include="getElevation_GIS.cs" />
     <Compile Include="hs_Obj.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="GetCenterline_Pipe.cs" />
     <Compile Include="InBrep_Pts.cs" />
     <Compile Include="isLinear.cs" />
-    <Compile Include="ptToEarthCoordinates_GIS.cs" />
+    <Compile Include="PtToEarthCoordinates_GIS.cs" />
     <Compile Include="_ViewPort\GetInfo_ViewPort.cs" />
     <Compile Include="_ViewPort\Make2D_ViewPort.cs" />
     <Compile Include="_ViewPort\SetCamera_ViewPort.cs" />
