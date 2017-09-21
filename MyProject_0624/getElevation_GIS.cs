@@ -30,8 +30,8 @@ namespace MyProject_0624
             pManager.AddNumberParameter("Lat", "Latitude", "Latitude", GH_ParamAccess.list);
             pManager.AddNumberParameter("Lon", "Longitude", "Longitude", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Res", "Resolution", "Resolution", GH_ParamAccess.item);
-            pManager[0].Optional = true;
-            pManager[1].Optional = true;
+            pManager[2].Optional = true;
+            //pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -39,7 +39,9 @@ namespace MyProject_0624
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Elevation", "Elevation", "Elevation in meters", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Lat", "Lat", "Queryed Latitude in meters", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Lon", "Lon", "Queryed Longitude in meters", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Elevation", "Ele", "Queryed Elevation in meters", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -54,10 +56,12 @@ namespace MyProject_0624
             string inputLongitudeA = "36.23998";
             string inputLongitudeB = "-116.83171";
             */
+
+
             List<double> inputLatitude = new List<double>();
             List<double> inputLongitude = new List<double>();
 
-            int resCount = 10;
+            int resCount = 3;
 
 
             DA.GetDataList(0, inputLatitude);
@@ -74,28 +78,7 @@ namespace MyProject_0624
 
             inputLatitudeA = inputLatitude[0].ToString();
             inputLatitudeB = inputLatitude[1].ToString();
-
-            /*
-            if (inputLongitude[0] < 0)
-            {
-                inputLongitudeA = "%20" + inputLongitude[0].ToString();
-            }
-
-            else
-            {
-                inputLongitudeA = inputLongitude[0].ToString();
-            }
-
-            if (inputLongitude[1] < 0)
-            {
-                inputLongitudeB = "%20" + inputLongitude[0].ToString();
-            }
-
-            else
-            {
-                inputLongitudeB = inputLongitude[0].ToString();
-            }
-            */
+            
 
 
             inputLongitudeA = inputLongitude[0].ToString();
@@ -113,12 +96,14 @@ namespace MyProject_0624
 
             var js = wc.DownloadString(actualUrl);
             JObject json = JObject.Parse(js);
-            //JsonConvert.DeserializeObject<>(js);
 
 
+            List<double> latData = new List<double>();
+            List<double> lonData = new List<double>();
             List<double> elevationData = new List<double>();
 
             
+
             
             foreach (var resultset in json["results"])
             {
@@ -126,9 +111,32 @@ namespace MyProject_0624
                 double elevationDouble = Convert.ToDouble(elevationStr);
 
                 elevationData.Add(elevationDouble);
+
+                //var lonStrr = resultset["location"].ToString();
+
+                string latStr = resultset["location"].First.ToString().Split(':')[1];
+                double latDouble = Convert.ToDouble(latStr);
+                latData.Add(latDouble);
+
+
+                string lonStr = resultset["location"].Last.ToString().Split(':')[1];
+                double lonDouble = Convert.ToDouble(lonStr);
+                lonData.Add(lonDouble);
+                /*
+                foreach (var locationset in resultset["location"])
+                {
+
+
+
+                }
+                */
+
             }
             
-            DA.SetDataList(0, elevationData);
+
+            DA.SetDataList(0, latData);
+            DA.SetDataList(1, lonData);
+            DA.SetDataList(2, elevationData);
         }
 
         /// <summary>
