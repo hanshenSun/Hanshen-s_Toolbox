@@ -143,9 +143,29 @@ namespace MyProject_0624.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EarthCoordinatesToXY_GIS {
+            get {
+                object obj = ResourceManager.GetObject("EarthCoordinatesToXY_GIS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap GetCenterLine_Pipe {
             get {
                 object obj = ResourceManager.GetObject("GetCenterLine_Pipe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap getElevation_GIS {
+            get {
+                object obj = ResourceManager.GetObject("getElevation_GIS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -176,6 +196,16 @@ namespace MyProject_0624.Properties {
         internal static System.Drawing.Bitmap isLinear {
             get {
                 object obj = ResourceManager.GetObject("isLinear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ptToEarthCoordinates_GIS {
+            get {
+                object obj = ResourceManager.GetObject("ptToEarthCoordinates_GIS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

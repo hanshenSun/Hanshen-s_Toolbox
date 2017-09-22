@@ -6,13 +6,13 @@ using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class EarthCoordinatesToXY : GH_Component
+    public class EarthCoordinatesToXY_GIS : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the EarthCoordinatesToXY class.
         /// </summary>
-        public EarthCoordinatesToXY()
-          : base("EarthCoordinatesToXY", "EarthCoordinatesToXY",
+        public EarthCoordinatesToXY_GIS()
+          : base("EarthCoordinatesToXY_GIS", "EarthCoordinatesToXY",
               "Convert Latitude and Longitude to XY data using Mercator Projection",
               "HS_ToolBox", "GIS")
         {
@@ -25,6 +25,8 @@ namespace MyProject_0624
         {
             pManager.AddNumberParameter("Lat", "Lat", "Latitude", GH_ParamAccess.item);
             pManager.AddNumberParameter("Lon", "Lon", "Longitude", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Ele", "Ele", "Elevation", GH_ParamAccess.item);
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -43,15 +45,19 @@ namespace MyProject_0624
         {
             double latitude = 0.0;
             double longitude = 0.0;
+            double elevation = 0.0;
+
 
             DA.GetData(0, ref latitude);
             DA.GetData(1, ref longitude);
+            DA.GetData(2, ref elevation);
 
             double latitudeY = MercatorProjection.latToY(latitude);
-            double latitudeX = MercatorProjection.lonToX(longitude);
+            double longitudeX = MercatorProjection.lonToX(longitude);
+            
 
 
-            Point3d quryedPt = new Point3d(latitudeX, latitudeY, 0);
+            Point3d quryedPt = new Point3d(longitudeX, latitudeY, elevation);
             DA.SetData(0, quryedPt);
 
         }
@@ -65,7 +71,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.EarthCoordinatesToXY_GIS;
             }
         }
 

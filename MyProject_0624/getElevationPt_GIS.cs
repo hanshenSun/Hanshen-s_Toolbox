@@ -10,12 +10,12 @@ using Rhino.Geometry;
 
 namespace MyProject_0624
 {
-    public class getElevation_GIS : GH_Component
+    public class getElevationPt_GIS : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the getElevation_GIS class.
         /// </summary>
-        public getElevation_GIS()
+        public getElevationPt_GIS()
           : base("getElevation_GIS", "getElevation",
               "Get Elevation data in meters using Google Elevation API",
               "HS_ToolBox", "GIS")
@@ -31,6 +31,7 @@ namespace MyProject_0624
             pManager.AddNumberParameter("Lon", "Longitude", "Longitude", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Res", "Resolution", "Resolution", GH_ParamAccess.item);
             pManager[2].Optional = true;
+            pManager.AddBooleanParameter("Run?", "Run?", "Set true to run", GH_ParamAccess.item);
             //pManager[1].Optional = true;
         }
 
@@ -62,81 +63,87 @@ namespace MyProject_0624
             List<double> inputLongitude = new List<double>();
 
             int resCount = 3;
+            bool runBool = false;
 
 
             DA.GetDataList(0, inputLatitude);
             DA.GetDataList(1,  inputLongitude);
             DA.GetData(2, ref resCount);
+            DA.GetData(3, ref runBool);
 
-            int countA = inputLongitude.Count;
-            int coutB = inputLatitude.Count;
-
-            string inputLatitudeA = "36.578581";
-            string inputLatitudeB = "-118.291994";
-            string inputLongitudeA = "36.23998";
-            string inputLongitudeB = "-116.83171";
-
-            inputLatitudeA = inputLatitude[0].ToString();
-            inputLatitudeB = inputLatitude[1].ToString();
-            
-
-
-            inputLongitudeA = inputLongitude[0].ToString();
-            inputLongitudeB = inputLongitude[1].ToString();
-
-
-            string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?path=";
-            string path = inputLatitudeA + "," + inputLongitudeA +   " | " + inputLatitudeB + "," + inputLongitudeB;
-            string actualUrl = ELEVATION_BASE_URL + path + "&samples=" + resCount;
-
-
-            //response = simplejson.load(urllib.urlopen(url))
-
-            WebClient wc = new WebClient();
-
-            var js = wc.DownloadString(actualUrl);
-            JObject json = JObject.Parse(js);
-
-
-            List<double> latData = new List<double>();
-            List<double> lonData = new List<double>();
-            List<double> elevationData = new List<double>();
-
-            
-
-            
-            foreach (var resultset in json["results"])
+            if (runBool == true)
             {
-                string elevationStr = resultset["elevation"].ToString();
-                double elevationDouble = Convert.ToDouble(elevationStr);
 
-                elevationData.Add(elevationDouble);
+                int countA = inputLongitude.Count;
+                int coutB = inputLatitude.Count;
 
-                //var lonStrr = resultset["location"].ToString();
+                string inputLatitudeA = "36.578581";
+                string inputLatitudeB = "-118.291994";
+                string inputLongitudeA = "36.23998";
+                string inputLongitudeB = "-116.83171";
 
-                string latStr = resultset["location"].First.ToString().Split(':')[1];
-                double latDouble = Convert.ToDouble(latStr);
-                latData.Add(latDouble);
+                inputLatitudeA = inputLatitude[0].ToString();
+                inputLatitudeB = inputLatitude[1].ToString();
+
+                
+                inputLongitudeA = inputLongitude[0].ToString();
+                inputLongitudeB = inputLongitude[1].ToString();
 
 
-                string lonStr = resultset["location"].Last.ToString().Split(':')[1];
-                double lonDouble = Convert.ToDouble(lonStr);
-                lonData.Add(lonDouble);
-                /*
-                foreach (var locationset in resultset["location"])
+                string ELEVATION_BASE_URL = "https://maps.googleapis.com/maps/api/elevation/json?path=";
+                string path = inputLatitudeA + "," + inputLongitudeA + " | " + inputLatitudeB + "," + inputLongitudeB;
+                string actualUrl = ELEVATION_BASE_URL + path + "&samples=" + resCount;
+
+
+                //response = simplejson.load(urllib.urlopen(url))
+
+                WebClient wc = new WebClient();
+
+                var js = wc.DownloadString(actualUrl);
+                JObject json = JObject.Parse(js);
+
+
+                List<double> latData = new List<double>();
+                List<double> lonData = new List<double>();
+                List<double> elevationData = new List<double>();
+
+
+
+
+                foreach (var resultset in json["results"])
                 {
+                    string elevationStr = resultset["elevation"].ToString();
+                    double elevationDouble = Convert.ToDouble(elevationStr);
+                    elevationData.Add(elevationDouble);
+
+                    string latStr = resultset["location"].First.ToString().Split(':')[1];
+                    double latDouble = Convert.ToDouble(latStr);
+                    latData.Add(latDouble);
+                    string lonStr = resultset["location"].Last.ToString().Split(':')[1];
+                    double lonDouble = Convert.ToDouble(lonStr);
+                    lonData.Add(lonDouble);
+                    /*
+                    foreach (var locationset in resultset["location"])
+                    {
 
 
+
+                    }
+                    */
 
                 }
-                */
+                DA.SetDataList(0, latData);
+                DA.SetDataList(1, lonData);
+                DA.SetDataList(2, elevationData);
 
             }
-            
 
-            DA.SetDataList(0, latData);
-            DA.SetDataList(1, lonData);
-            DA.SetDataList(2, elevationData);
+            else
+            {
+                return;
+            }
+
+            
         }
 
         /// <summary>
@@ -148,7 +155,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.getElevation_GIS;
             }
         }
 

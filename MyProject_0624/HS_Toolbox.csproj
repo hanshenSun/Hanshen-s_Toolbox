@@ -59,9 +59,9 @@
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="AddAttribute_Pts.cs" />
     <Compile Include="BatchAnimation_Rendering.cs" />
-    <Compile Include="EarthCoordinatesToXY.cs" />
+    <Compile Include="EarthCoordinatesToXY_GIS.cs" />
     <Compile Include="getBrepOutline _Brep.cs" />
-    <Compile Include="getElevation_GIS.cs" />
+    <Compile Include="getElevationPt_GIS.cs" />
     <Compile Include="hs_Obj.cs" />
     <Compile Include="DestructAttribute_Crv.cs" />
     <Compile Include="DestructAttribute_Pts.cs" />
@@ -146,6 +146,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\GetInfo_Viewport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\getElevation_GIS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\EarthCoordinatesToXY_GIS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\ptToEarthCoordinates_GIS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

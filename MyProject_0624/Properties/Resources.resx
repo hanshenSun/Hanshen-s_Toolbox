@@ -166,4 +166,13 @@
   <data name="GetInfo_Viewport" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icons\GetInfo_Viewport.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="EarthCoordinatesToXY_GIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\EarthCoordinatesToXY_GIS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ptToEarthCoordinates_GIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\ptToEarthCoordinates_GIS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="getElevation_GIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\getElevation_GIS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -13,7 +13,7 @@ namespace MyProject_0624
         /// Initializes a new instance of the ptToEarthPt class.
         /// </summary>
         public PtToEarthCoordinates_GIS()
-          : base("ptToEarthPt", "ptToEarthPt",
+          : base("ptToEarthPt_GIS", "ptToEarthPt",
               "Converts Rhino Coordinates to Longitude and Latitude using Mercator Projection",
               "HS_ToolBox", "GIS")
         {
@@ -65,7 +65,7 @@ namespace MyProject_0624
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Properties.Resources.ptToEarthCoordinates_GIS;
             }
         }
 
