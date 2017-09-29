@@ -8,12 +8,12 @@ using Rhino.Commands;
 
 namespace MyProject_0624
 {
-    public class BatchAnimation_Rendering : GH_Component
+    public class BatchAnimation_Render : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the BatchAnimation_Rendering class.
         /// </summary>
-        public BatchAnimation_Rendering()
+        public BatchAnimation_Render()
           : base("BatchAnimation_Rendering", "Batch_Render",
               "Automates rendering consecutively using Rhino's current renderer. Code for doing batch rendering for animation using V-Ray, Based on Lauren Vasey's script posted on the Grasshopper3d forum",
               "HS_ToolBox", "ViewPort")
