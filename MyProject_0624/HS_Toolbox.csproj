@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="AddAttribute_Pts.cs" />
+    <Compile Include="_ViewPort\AddSpotLight.cs" />
     <Compile Include="_ViewPort\BatchAnimation_Render.cs" />
     <Compile Include="EarthCoordinatesToXY_GIS.cs" />
     <Compile Include="getBrepOutline _Brep.cs" />
