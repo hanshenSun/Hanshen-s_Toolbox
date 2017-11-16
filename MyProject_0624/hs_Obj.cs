@@ -275,6 +275,38 @@ namespace MyProject_0624
 
         }
 
+        public static List<Guid> getObjectIds(string targetName)
+        {
+            
+
+            System.Collections.Generic.List<Guid> ids = new System.Collections.Generic.List<Guid>();
+            foreach (Rhino.DocObjects.RhinoObject rhObj in RhinoDoc.ActiveDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.AnyObject))
+            {
+                if(rhObj.Name == targetName)
+                {
+                    ids.Add(rhObj.Id);
+                }
+            }
+            return ids;
+
+        }
+
+        public static List<Guid> getLightObjectIds(string targetName)
+        {
+
+
+            System.Collections.Generic.List<Guid> ids = new System.Collections.Generic.List<Guid>();
+            foreach (Rhino.DocObjects.RhinoObject rhObj in RhinoDoc.ActiveDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.Light))
+            {
+                if (rhObj.Name == targetName)
+                {
+                    ids.Add(rhObj.Id);
+                }
+            }
+            return ids;
+
+        }
+
     }
 
     public static class MercatorProjection
