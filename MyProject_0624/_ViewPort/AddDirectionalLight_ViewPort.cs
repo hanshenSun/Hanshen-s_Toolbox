@@ -30,7 +30,7 @@ namespace MyProject_0624._ViewPort
             pManager.AddColourParameter("Color", "Diffuse Color", "Diffuse Color of the Light", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Directional?", "Directional Light?", "Input a boolean to determine whether this light object is directional light or not", GH_ParamAccess.item);
             pManager.AddPointParameter("Target", "Target Point", "Target of the Directional Light", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Intensity", "Intensity of the light", "Intensity of the light object", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Intensity", "Intensity of the light", "Intensity(Min 0.0, Max 1.0) of the light object", GH_ParamAccess.item);
             pManager.AddBooleanParameter("initialize?", "initialize the light", "set true to initialize the light", GH_ParamAccess.item);
             
             //pManager[0].Optional = true;
@@ -115,18 +115,11 @@ namespace MyProject_0624._ViewPort
                         Rhino.RhinoDoc.ActiveDoc.Lights.Modify(id, newLight);
                         //Rhino.RhinoDoc.ActiveDoc.Lights. = newLight;
                     }
-                    
-
                 }
                 else
                 {
                     Rhino.RhinoDoc.ActiveDoc.Lights.Add(newLight);
                 }
-
-
-                
-                
-
             }
 
             

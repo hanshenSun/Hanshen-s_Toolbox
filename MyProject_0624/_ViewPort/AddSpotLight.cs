@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
@@ -26,7 +27,7 @@ namespace MyProject_0624._ViewPort
             pManager.AddTextParameter("Name", "Name", "Name is used to update ", GH_ParamAccess.item);
             pManager.AddPointParameter("Location", "Location", "Location of the Light Object", GH_ParamAccess.item);
             pManager.AddColourParameter("Color", "Diffuse Color", "Diffuse Color of the Light", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Intensity", "Intensity of the light", "Intensity of the light object", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Intensity", "Intensity of the light", "Intensity(Min 0.0, Max 1.0) of the light object", GH_ParamAccess.item);
             pManager.AddBooleanParameter("initialize?", "initialize the light", "set true to initialize the light", GH_ParamAccess.item);
 
             //pManager[0].Optional = true;
@@ -49,6 +50,47 @@ namespace MyProject_0624._ViewPort
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            Light newLight = new Light();
+            string lightName = "";
+            Point3d lightLoc = new Point3d(0, 0, 0);
+            Color lightColor = new Color();
+            lightColor = Color.Cyan;
+            double lightIntensity = 0.0;
+            bool initializeBool = false;
+
+            DA.GetData(0, ref lightName);
+            DA.GetData(1, ref lightLoc);
+            DA.GetData(2, ref lightColor);
+            DA.GetData(3, ref lightIntensity);
+            DA.GetData(4, ref initializeBool);
+
+            newLight.Name = lightName;
+            newLight.LightStyle = LightStyle.WorldSpot;
+            newLight.Location = lightLoc;
+            newLight.Diffuse = lightColor;
+            newLight.Intensity = lightIntensity;
+            newLight.IsEnabled = initializeBool;
+
+            if (initializeBool == true)
+            {
+
+                List<Guid> foundLightID = hs_functions.getLightObjectIds(lightName);
+
+
+                if (foundLightID.Count > 0)
+                {
+                    List<int> foundIDIndex = new List<int>();
+                    foreach (Guid id in foundLightID)
+                    {
+                        Rhino.RhinoDoc.ActiveDoc.Lights.Modify(id, newLight);
+                    }
+                }
+                else
+                {
+                    Rhino.RhinoDoc.ActiveDoc.Lights.Add(newLight);
+                }
+            }
+
         }
 
         /// <summary>
