@@ -35,12 +35,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GH_IO">
-      <HintPath>..\..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper {B45A29B1-4343-4035-989E-044E8580D9CF}\0.9.76.0\GH_IO.dll</HintPath>
+      <HintPath>..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper {B45A29B1-4343-4035-989E-044E8580D9CF}\0.9.76.0\GH_IO.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper {B45A29B1-4343-4035-989E-044E8580D9CF}\0.9.76.0\Grasshopper.dll</HintPath>
+      <HintPath>..\..\..\AppData\Roaming\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper {B45A29B1-4343-4035-989E-044E8580D9CF}\0.9.76.0\Grasshopper.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\..\..\Downloads\NAudio-1.8.0-Release\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -58,6 +61,7 @@
   <ItemGroup>
     <Compile Include="AddAttribute_Crv.cs" />
     <Compile Include="AddAttribute_Pts.cs" />
+    <Compile Include="_Audio\GetAudioLength.cs" />
     <Compile Include="_ViewPort\AddSpotLight.cs" />
     <Compile Include="_ViewPort\BatchAnimation_Render.cs" />
     <Compile Include="EarthCoordinatesToXY_GIS.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="PtToEarthCoordinates_GIS.cs" />
     <Compile Include="staticCompare.cs" />
     <Compile Include="_ViewPort\AddDirectionalLight_ViewPort.cs" />
+    <Compile Include="_ViewPort\DeleteMostRecentObject.cs" />
     <Compile Include="_ViewPort\GetInfo_ViewPort.cs" />
     <Compile Include="_ViewPort\Make2D_ViewPort.cs" />
     <Compile Include="_ViewPort\SetCamera_ViewPort.cs" />
@@ -82,6 +87,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StringMatchIndex_String.cs" />
+    <Compile Include="_ViewPort\UpdateLastBrep.cs" />
     <Compile Include="_ViewPort\ZoomIterator_ViewPort.cs" />
     <Compile Include="DirectionUnifier_Crv.cs" />
     <None Include="CloestCrvInRadius.cs" />
