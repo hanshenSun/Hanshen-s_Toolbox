@@ -42,3 +42,4 @@ C:\Users\HANSHEN\Documents\Hanshen-s_Toolbox\MyProject_0624\bin\NAudio.dll
 C:\Users\HANSHEN\Documents\Hanshen-s_Toolbox\MyProject_0624\bin\Newtonsoft.Json.dll
 C:\Users\HANSHEN\Documents\Hanshen-s_Toolbox\MyProject_0624\bin\NAudio.xml
 C:\Users\HANSHEN\Documents\Hanshen-s_Toolbox\MyProject_0624\bin\Newtonsoft.Json.xml
+C:\Users\HANSHEN\Documents\Hanshen-s_Toolbox\MyProject_0624\obj\Debug64\HS_Toolbox.csprojResolveAssemblyReference.cache

@@ -49,7 +49,7 @@ namespace MyProject_0624._ViewPort
             string outputMessage = "True";
             Rhino.DocObjects.ObjectAttributes bakeAttribute = new Rhino.DocObjects.ObjectAttributes();
             string layerName = null;
-
+            //layerName.ToString()
             DA.GetData(0, ref startBool);
             DA.GetData(1, ref geometryforUpdate);
 
