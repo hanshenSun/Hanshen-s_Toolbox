@@ -306,6 +306,7 @@ namespace MyProject_0624
             return ids;
 
         }
+
         public static List<Guid> getBrepIds(bool startBool)
         {
 
@@ -318,6 +319,22 @@ namespace MyProject_0624
             return ids;
 
         }
+        public static bool[] stringMatch(string inputString, string keyString)
+        {
+            //Comparing model element name to specifc type names (Case Insensative)
+            bool matchBool = String.Equals(inputString, keyString, StringComparison.CurrentCultureIgnoreCase);
+            bool caseBool;
+            if (String.Compare(inputString, keyString, false) == 0) { caseBool = true; }
+            else { caseBool = false; }
+            bool[] result = new bool[] { matchBool, caseBool };
+            return result;
+        }
+
+        public static bool containInsensitive(string inputString, string subString)
+        {
+            return inputString.IndexOf(subString, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        }
+
 
     }
 
